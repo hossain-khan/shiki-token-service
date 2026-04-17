@@ -1,0 +1,219 @@
+# Shiki Token Service
+
+A portable syntax highlighting microservice that tokenizes source code using [Shiki](https://shiki.style/) and returns colored tokens as JSON. Built with [Hono](https://hono.dev/) for deployment on Cloudflare Workers, Heroku (Node.js), or any JS runtime. Designed for rendering syntax-highlighted code in native mobile apps (Android/iOS) without client-side parsing.
+
+## Quick Start
+
+```bash
+npm install
+npm run build
+PORT=3000 npm start
+```
+
+For local development with Cloudflare Workers:
+
+```bash
+npm run dev
+```
+
+## API Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/docs` | Interactive Swagger UI API explorer |
+| `GET` | `/openapi.json` | OpenAPI 3.1 specification |
+| `GET` | `/health` | Health check |
+| `GET` | `/languages` | List supported languages and themes |
+| `POST` | `/highlight` | Tokenize code with a single theme |
+| `POST` | `/highlight/dual` | Tokenize with dark + light themes |
+| `POST` | `/highlight/semantic` | Tokenize with semantic token types |
+
+## Usage
+
+### `POST /highlight`
+
+Tokenizes code with a single color theme.
+
+**Request:**
+
+```bash
+curl -X POST https://your-host/highlight \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "fun main() {\n    println(\"Hello\")\n}",
+    "language": "kotlin",
+    "theme": "github-dark"
+  }'
+```
+
+**Response:**
+
+```json
+{
+  "language": "kotlin",
+  "theme": "github-dark",
+  "tokens": [
+    [
+      { "text": "fun", "color": "#F97583" },
+      { "text": " ", "color": "#E1E4E8" },
+      { "text": "main", "color": "#B392F0" },
+      { "text": "() {", "color": "#E1E4E8" }
+    ],
+    [
+      { "text": "    ", "color": "#E1E4E8" },
+      { "text": "println", "color": "#B392F0" },
+      { "text": "(", "color": "#E1E4E8" },
+      { "text": "\"Hello\"", "color": "#9ECBFF" },
+      { "text": ")", "color": "#E1E4E8" }
+    ],
+    [
+      { "text": "}", "color": "#E1E4E8" }
+    ]
+  ]
+}
+```
+
+| Field | Type | Required | Default |
+|-------|------|----------|---------|
+| `code` | string | yes | — |
+| `language` | string | no | `"text"` |
+| `theme` | string | no | `"github-dark"` |
+
+### `POST /highlight/dual`
+
+Tokenizes code with both dark and light themes in a single request — useful for apps that support both modes.
+
+**Request:**
+
+```bash
+curl -X POST https://your-host/highlight/dual \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "val x = 42",
+    "language": "kotlin"
+  }'
+```
+
+**Response:**
+
+```json
+{
+  "language": "kotlin",
+  "darkTheme": "github-dark",
+  "lightTheme": "github-light",
+  "tokens": [
+    [
+      { "text": "val", "darkColor": "#F97583", "lightColor": "#D73A49" },
+      { "text": " x ", "darkColor": "#E1E4E8", "lightColor": "#24292E" },
+      { "text": "=", "darkColor": "#F97583", "lightColor": "#D73A49" },
+      { "text": " ", "darkColor": "#E1E4E8", "lightColor": "#24292E" },
+      { "text": "42", "darkColor": "#79B8FF", "lightColor": "#005CC5" }
+    ]
+  ]
+}
+```
+
+| Field | Type | Required | Default |
+|-------|------|----------|---------|
+| `code` | string | yes | — |
+| `language` | string | no | `"text"` |
+| `darkTheme` | string | no | `"github-dark"` |
+| `lightTheme` | string | no | `"github-light"` |
+
+### `POST /highlight/semantic`
+
+Returns token types (keyword, function, string, etc.) instead of colors — useful when the client app manages its own color palette.
+
+**Request:**
+
+```bash
+curl -X POST https://your-host/highlight/semantic \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "const x = 1;",
+    "language": "javascript"
+  }'
+```
+
+**Response:**
+
+```json
+{
+  "language": "javascript",
+  "tokenTypes": ["type", "plain", "variable", "keyword", "number", "punctuation"],
+  "tokens": [
+    [
+      { "text": "const", "type": "type" },
+      { "text": " ", "type": "plain" },
+      { "text": "x", "type": "variable" },
+      { "text": " ", "type": "plain" },
+      { "text": "=", "type": "keyword" },
+      { "text": " ", "type": "plain" },
+      { "text": "1", "type": "number" },
+      { "text": ";", "type": "punctuation" }
+    ]
+  ]
+}
+```
+
+### `GET /languages`
+
+Returns all supported languages and themes.
+
+```bash
+curl https://your-host/languages
+```
+
+### Error Responses
+
+All errors return JSON with an `error` field and optional `details`:
+
+```json
+{ "error": "Unsupported language: brainfuck", "details": "Supported languages: kotlin, java, ..." }
+```
+
+| Status | Meaning |
+|--------|---------|
+| `400` | Bad request (invalid body, unsupported language/theme) |
+| `413` | Payload too large (body over 200KB) |
+| `500` | Internal server error |
+
+## Supported Languages
+
+`kotlin`, `java`, `python`, `javascript`, `typescript`, `swift`, `go`, `rust`, `json`, `yaml`, `bash`, `sql`, `html`, `css`, `c`, `cpp`, `ruby`, `php`, `markdown`, `xml`, `toml`, `dockerfile`, `graphql`
+
+## Supported Themes
+
+`github-dark`, `github-light`, `one-dark-pro`, `dracula`, `min-light`
+
+## Deployment
+
+### Heroku
+
+```bash
+heroku create your-app-name
+heroku buildpacks:set heroku/nodejs
+git push heroku main
+```
+
+### Cloudflare Workers
+
+```bash
+npm run deploy
+```
+
+### Standalone Node.js
+
+Set the `PORT` environment variable and the server starts automatically:
+
+```bash
+npm run build
+PORT=3000 node dist/index.js
+```
+
+## Tech Stack
+
+- **Framework**: [Hono](https://hono.dev/) (portable across runtimes)
+- **Highlighting**: [Shiki](https://shiki.style/) (TextMate grammar-based, same engine as VS Code)
+- **Validation**: [Zod](https://zod.dev/)
+- **Language**: TypeScript

@@ -26,6 +26,8 @@ app.route("/", highlightDual);
 app.route("/", highlightSemantic);
 app.route("/", docs);
 
+app.get("/", (c) => c.redirect("/docs"));
+
 app.onError((err, c) => {
   console.error("Unhandled error:", err);
   return c.json({ error: "Internal server error" }, 500);
