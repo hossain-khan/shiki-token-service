@@ -2,8 +2,9 @@ import { Hono } from "hono";
 import { HighlightDualRequestSchema } from "../lib/schemas.js";
 import { getHighlighter, getSupportedLanguages, getSupportedThemes } from "../lib/highlighter.js";
 import { badRequest, unsupportedLanguage, unsupportedTheme, internalError } from "../lib/errors.js";
+import { withDebug } from "../lib/debug.js";
 
-const app = new Hono();
+const app = new Hono<Env>();
 
 app.post("/highlight/dual", async (c) => {
   const parsed = HighlightDualRequestSchema.safeParse(await c.req.json());
@@ -27,8 +28,10 @@ app.post("/highlight/dual", async (c) => {
 
   try {
     const highlighter = await getHighlighter();
+    const t0 = performance.now();
     const darkTokens = highlighter.codeToTokensBase(code, { lang: language as any, theme: darkTheme as any });
     const lightTokens = highlighter.codeToTokensBase(code, { lang: language as any, theme: lightTheme as any });
+    c.set("tokenizerMs", performance.now() - t0);
 
     const tokens = darkTokens.map((line, i) =>
       line.map((token, j) => ({
@@ -38,7 +41,7 @@ app.post("/highlight/dual", async (c) => {
       }))
     );
 
-    return c.json({ language, darkTheme, lightTheme, tokens });
+    return c.json(withDebug(c, { language, darkTheme, lightTheme, tokens }, { language, darkTheme, lightTheme }));
   } catch (e) {
     return internalError(c, "Highlighting failed");
   }

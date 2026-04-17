@@ -3,8 +3,9 @@ import { HighlightSemanticRequestSchema } from "../lib/schemas.js";
 import { getHighlighter, getSupportedLanguages } from "../lib/highlighter.js";
 import { badRequest, unsupportedLanguage, internalError } from "../lib/errors.js";
 import { mapScopeToTokenType } from "../lib/scope-mapper.js";
+import { withDebug } from "../lib/debug.js";
 
-const app = new Hono();
+const app = new Hono<Env>();
 
 app.post("/highlight/semantic", async (c) => {
   const parsed = HighlightSemanticRequestSchema.safeParse(await c.req.json());
@@ -21,11 +22,13 @@ app.post("/highlight/semantic", async (c) => {
 
   try {
     const highlighter = await getHighlighter();
+    const t0 = performance.now();
     const result = highlighter.codeToTokens(code, {
       lang: language as any,
       theme: "github-dark" as any,
       includeExplanation: true,
     });
+    c.set("tokenizerMs", performance.now() - t0);
 
     const tokenTypesSet = new Set<string>();
     const tokens = result.tokens.map((line) =>
@@ -37,11 +40,7 @@ app.post("/highlight/semantic", async (c) => {
       })
     );
 
-    return c.json({
-      language,
-      tokenTypes: [...tokenTypesSet],
-      tokens,
-    });
+    return c.json(withDebug(c, { language, tokenTypes: [...tokenTypesSet], tokens }, { language }));
   } catch (e) {
     return internalError(c, "Highlighting failed");
   }

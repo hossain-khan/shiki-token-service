@@ -7,7 +7,7 @@ import highlightDual from "./routes/highlight-dual.js";
 import highlightSemantic from "./routes/highlight-semantic.js";
 import docs from "./routes/docs.js";
 
-const app = new Hono();
+const app = new Hono<Env>();
 
 app.use("*", cors());
 
@@ -16,7 +16,15 @@ app.use("*", async (c, next) => {
   if (contentLength > 200 * 1024) {
     return c.json({ error: "Payload too large", details: "Maximum body size is 200KB" }, 413);
   }
+  c.set("requestStart", performance.now());
+  c.set("requestBodyBytes", contentLength);
   await next();
+  const totalMs = performance.now() - (c.get("requestStart") as number);
+  const tokenizerMs = (c.get("tokenizerMs") as number | undefined) ?? undefined;
+  const serverTiming = tokenizerMs !== undefined
+    ? `total;dur=${totalMs.toFixed(1)}, tokenizer;dur=${tokenizerMs.toFixed(1)}`
+    : `total;dur=${totalMs.toFixed(1)}`;
+  c.header("Server-Timing", serverTiming);
 });
 
 app.route("/", health);
