@@ -1,0 +1,305 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Shiki Token Service",
+    "version": "1.0.0",
+    "description": "A syntax highlighting microservice that tokenizes source code using Shiki and returns colored tokens as JSON. Built for rendering syntax-highlighted code in native mobile apps without client-side parsing."
+  },
+  "servers": [
+    { "url": "https://shiki-token-service-3ab370a7b9cc.herokuapp.com", "description": "Production (Heroku)" },
+    { "url": "http://localhost:3000", "description": "Local development" }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "operationId": "getHealth",
+        "tags": ["Status"],
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "ok" },
+                    "version": { "type": "string", "example": "1.0.0" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/languages": {
+      "get": {
+        "summary": "List supported languages and themes",
+        "operationId": "getLanguages",
+        "tags": ["Status"],
+        "responses": {
+          "200": {
+            "description": "Supported languages and themes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "languages": { "type": "array", "items": { "type": "string" }, "example": ["kotlin", "java", "python", "javascript"] },
+                    "themes": { "type": "array", "items": { "type": "string" }, "example": ["github-dark", "github-light", "dracula"] }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/highlight": {
+      "post": {
+        "summary": "Tokenize code with a single theme",
+        "operationId": "highlight",
+        "tags": ["Highlighting"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/HighlightRequest" },
+              "example": {
+                "code": "fun main() {\n    println(\"Hello\")\n}",
+                "language": "kotlin",
+                "theme": "github-dark"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokenized code",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HighlightResponse" },
+                "example": {
+                  "language": "kotlin",
+                  "theme": "github-dark",
+                  "tokens": [[{ "text": "fun", "color": "#F97583" }, { "text": " ", "color": "#E1E4E8" }, { "text": "main", "color": "#B392F0" }]]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "413": { "$ref": "#/components/responses/PayloadTooLarge" },
+          "500": { "$ref": "#/components/responses/InternalError" }
+        }
+      }
+    },
+    "/highlight/dual": {
+      "post": {
+        "summary": "Tokenize code with dark and light themes",
+        "operationId": "highlightDual",
+        "tags": ["Highlighting"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/HighlightDualRequest" },
+              "example": {
+                "code": "val x = 42",
+                "language": "kotlin",
+                "darkTheme": "github-dark",
+                "lightTheme": "github-light"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokenized code with dual theme colors",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HighlightDualResponse" },
+                "example": {
+                  "language": "kotlin",
+                  "darkTheme": "github-dark",
+                  "lightTheme": "github-light",
+                  "tokens": [[{ "text": "val", "darkColor": "#F97583", "lightColor": "#D73A49" }]]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "413": { "$ref": "#/components/responses/PayloadTooLarge" },
+          "500": { "$ref": "#/components/responses/InternalError" }
+        }
+      }
+    },
+    "/highlight/semantic": {
+      "post": {
+        "summary": "Tokenize code with semantic token types",
+        "operationId": "highlightSemantic",
+        "tags": ["Highlighting"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/HighlightSemanticRequest" },
+              "example": {
+                "code": "const x = 1;",
+                "language": "javascript"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokenized code with semantic types",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HighlightSemanticResponse" },
+                "example": {
+                  "language": "javascript",
+                  "tokenTypes": ["type", "plain", "variable", "keyword", "number", "punctuation"],
+                  "tokens": [[{ "text": "const", "type": "type" }, { "text": " ", "type": "plain" }, { "text": "x", "type": "variable" }]]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "413": { "$ref": "#/components/responses/PayloadTooLarge" },
+          "500": { "$ref": "#/components/responses/InternalError" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HighlightRequest": {
+        "type": "object",
+        "required": ["code"],
+        "properties": {
+          "code": { "type": "string", "maxLength": 100000, "description": "Source code to highlight" },
+          "language": { "type": "string", "default": "text", "description": "Language identifier" },
+          "theme": { "type": "string", "default": "github-dark", "description": "Color theme" }
+        }
+      },
+      "HighlightDualRequest": {
+        "type": "object",
+        "required": ["code"],
+        "properties": {
+          "code": { "type": "string", "maxLength": 100000, "description": "Source code to highlight" },
+          "language": { "type": "string", "default": "text", "description": "Language identifier" },
+          "darkTheme": { "type": "string", "default": "github-dark", "description": "Dark color theme" },
+          "lightTheme": { "type": "string", "default": "github-light", "description": "Light color theme" }
+        }
+      },
+      "HighlightSemanticRequest": {
+        "type": "object",
+        "required": ["code"],
+        "properties": {
+          "code": { "type": "string", "maxLength": 100000, "description": "Source code to highlight" },
+          "language": { "type": "string", "default": "text", "description": "Language identifier" }
+        }
+      },
+      "HighlightResponse": {
+        "type": "object",
+        "properties": {
+          "language": { "type": "string" },
+          "theme": { "type": "string" },
+          "tokens": {
+            "type": "array",
+            "description": "Array of lines, each containing an array of tokens",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string" },
+                  "color": { "type": "string", "description": "Hex color code" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "HighlightDualResponse": {
+        "type": "object",
+        "properties": {
+          "language": { "type": "string" },
+          "darkTheme": { "type": "string" },
+          "lightTheme": { "type": "string" },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string" },
+                  "darkColor": { "type": "string" },
+                  "lightColor": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "HighlightSemanticResponse": {
+        "type": "object",
+        "properties": {
+          "language": { "type": "string" },
+          "tokenTypes": { "type": "array", "items": { "type": "string" } },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string" },
+                  "type": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" },
+          "details": { "type": "string" }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request (invalid body, unsupported language/theme)",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+            "example": { "error": "Unsupported language: brainfuck", "details": "Supported languages: kotlin, java, ..." }
+          }
+        }
+      },
+      "PayloadTooLarge": {
+        "description": "Request body exceeds 200KB",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+            "example": { "error": "Payload too large", "details": "Maximum body size is 200KB" }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+            "example": { "error": "Internal server error" }
+          }
+        }
+      }
+    }
+  }
+}

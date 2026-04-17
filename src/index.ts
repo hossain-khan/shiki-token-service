@@ -5,6 +5,7 @@ import languages from "./routes/languages.js";
 import highlight from "./routes/highlight.js";
 import highlightDual from "./routes/highlight-dual.js";
 import highlightSemantic from "./routes/highlight-semantic.js";
+import docs from "./routes/docs.js";
 
 const app = new Hono();
 
@@ -23,6 +24,7 @@ app.route("/", languages);
 app.route("/", highlight);
 app.route("/", highlightDual);
 app.route("/", highlightSemantic);
+app.route("/", docs);
 
 app.onError((err, c) => {
   console.error("Unhandled error:", err);
