@@ -14,9 +14,17 @@ let highlighterPromise: Promise<HighlighterGeneric<BundledLanguage, BundledTheme
 
 export function getHighlighter() {
   if (!highlighterPromise) {
+    console.log("Initializing Shiki highlighter...");
     highlighterPromise = createHighlighter({
       themes: SUPPORTED_THEMES,
       langs: SUPPORTED_LANGUAGES,
+    }).then((h) => {
+      console.log("Shiki highlighter initialized successfully");
+      return h;
+    }).catch((e) => {
+      console.error("Shiki highlighter initialization failed:", e);
+      highlighterPromise = null;
+      throw e;
     });
   }
   return highlighterPromise;

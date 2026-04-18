@@ -33,6 +33,7 @@ app.post("/highlight", async (c) => {
     );
     return c.json(withDebug(c, { language, theme, tokens }, debug, { language, theme }));
   } catch (e) {
+    console.error("Highlighting failed:", e);
     return internalError(c, "Highlighting failed");
   }
 });

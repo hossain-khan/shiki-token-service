@@ -43,6 +43,7 @@ app.post("/highlight/dual", async (c) => {
 
     return c.json(withDebug(c, { language, darkTheme, lightTheme, tokens }, debug, { language, darkTheme, lightTheme }));
   } catch (e) {
+    console.error("Highlighting failed:", e);
     return internalError(c, "Highlighting failed");
   }
 });

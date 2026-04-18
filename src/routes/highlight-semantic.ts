@@ -42,6 +42,7 @@ app.post("/highlight/semantic", async (c) => {
 
     return c.json(withDebug(c, { language, tokenTypes: [...tokenTypesSet], tokens }, debug, { language }));
   } catch (e) {
+    console.error("Highlighting failed:", e);
     return internalError(c, "Highlighting failed");
   }
 });
