@@ -75,7 +75,8 @@
               "example": {
                 "code": "package com.example\n\nimport kotlinx.coroutines.*\n\ndata class User(val name: String, val age: Int)\n\nfun main() = runBlocking {\n    val users = listOf(\n        User(\"Alice\", 30),\n        User(\"Bob\", 25),\n        User(\"Charlie\", 35)\n    )\n\n    val adults = users.filter { it.age >= 30 }\n    adults.forEach { user ->\n        println(\"${user.name} is ${user.age} years old\")\n    }\n}",
                 "language": "kotlin",
-                "theme": "github-dark"
+                "theme": "github-dark",
+                "debug": true
               }
             }
           }
@@ -112,7 +113,8 @@
                 "code": "package com.example\n\nimport kotlinx.coroutines.*\n\ndata class User(val name: String, val age: Int)\n\nfun main() = runBlocking {\n    val users = listOf(\n        User(\"Alice\", 30),\n        User(\"Bob\", 25),\n        User(\"Charlie\", 35)\n    )\n\n    val adults = users.filter { it.age >= 30 }\n    adults.forEach { user ->\n        println(\"${user.name} is ${user.age} years old\")\n    }\n}",
                 "language": "kotlin",
                 "darkTheme": "github-dark",
-                "lightTheme": "github-light"
+                "lightTheme": "github-light",
+                "debug": true
               }
             }
           }
@@ -147,7 +149,8 @@
               "schema": { "$ref": "#/components/schemas/HighlightSemanticRequest" },
               "example": {
                 "code": "import express from 'express';\nimport { readFile } from 'fs/promises';\n\nconst app = express();\nconst PORT = process.env.PORT || 3000;\n\ninterface Config {\n    debug: boolean;\n    maxRetries: number;\n    baseUrl: string;\n}\n\nasync function loadConfig(path: string): Promise<Config> {\n    const raw = await readFile(path, 'utf-8');\n    return JSON.parse(raw) as Config;\n}\n\napp.get('/health', (_req, res) => {\n    res.json({ status: 'ok', timestamp: Date.now() });\n});\n\napp.listen(PORT, () => {\n    console.log(`Server running on port ${PORT}`);\n});",
-                "language": "typescript"
+                "language": "typescript",
+                "debug": true
               }
             }
           }
