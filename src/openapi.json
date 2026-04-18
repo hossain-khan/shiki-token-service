@@ -5,10 +5,6 @@
     "version": "1.0.0",
     "description": "A syntax highlighting microservice that tokenizes source code using Shiki and returns colored tokens as JSON. Built for rendering syntax-highlighted code in native mobile apps without client-side parsing."
   },
-  "servers": [
-    { "url": "https://shiki-token-service-3ab370a7b9cc.herokuapp.com", "description": "Production (Heroku)" },
-    { "url": "http://localhost:3000", "description": "Local development" }
-  ],
   "paths": {
     "/health": {
       "get": {
