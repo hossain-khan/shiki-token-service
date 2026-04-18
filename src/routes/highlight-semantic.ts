@@ -13,7 +13,7 @@ app.post("/highlight/semantic", async (c) => {
     return badRequest(c, "Invalid request", parsed.error.message);
   }
 
-  const { code, language } = parsed.data;
+  const { code, language, debug } = parsed.data;
   const languages = getSupportedLanguages();
 
   if (language !== "text" && !languages.includes(language)) {
@@ -40,7 +40,7 @@ app.post("/highlight/semantic", async (c) => {
       })
     );
 
-    return c.json(withDebug(c, { language, tokenTypes: [...tokenTypesSet], tokens }, { language }));
+    return c.json(withDebug(c, { language, tokenTypes: [...tokenTypesSet], tokens }, debug, { language }));
   } catch (e) {
     return internalError(c, "Highlighting failed");
   }

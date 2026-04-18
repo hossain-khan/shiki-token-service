@@ -18,6 +18,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": ["status", "version"],
                   "properties": {
                     "status": { "type": "string", "example": "ok" },
                     "version": { "type": "string", "example": "1.0.0" }
@@ -41,9 +42,18 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": ["languages", "themes"],
                   "properties": {
-                    "languages": { "type": "array", "items": { "type": "string" }, "example": ["kotlin", "java", "python", "javascript"] },
-                    "themes": { "type": "array", "items": { "type": "string" }, "example": ["github-dark", "github-light", "dracula"] }
+                    "languages": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "example": ["kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql"]
+                    },
+                    "themes": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "example": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"]
+                    }
                   }
                 }
               }
@@ -63,7 +73,7 @@
             "application/json": {
               "schema": { "$ref": "#/components/schemas/HighlightRequest" },
               "example": {
-                "code": "fun main() {\n    println(\"Hello\")\n}",
+                "code": "package com.example\n\nimport kotlinx.coroutines.*\n\ndata class User(val name: String, val age: Int)\n\nfun main() = runBlocking {\n    val users = listOf(\n        User(\"Alice\", 30),\n        User(\"Bob\", 25),\n        User(\"Charlie\", 35)\n    )\n\n    val adults = users.filter { it.age >= 30 }\n    adults.forEach { user ->\n        println(\"${user.name} is ${user.age} years old\")\n    }\n}",
                 "language": "kotlin",
                 "theme": "github-dark"
               }
@@ -72,15 +82,13 @@
         },
         "responses": {
           "200": {
-            "description": "Tokenized code",
+            "description": "Tokenized code with color values for each token",
+            "headers": {
+              "Server-Timing": { "$ref": "#/components/headers/ServerTiming" }
+            },
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HighlightResponse" },
-                "example": {
-                  "language": "kotlin",
-                  "theme": "github-dark",
-                  "tokens": [[{ "text": "fun", "color": "#F97583" }, { "text": " ", "color": "#E1E4E8" }, { "text": "main", "color": "#B392F0" }]]
-                }
+                "schema": { "$ref": "#/components/schemas/HighlightResponse" }
               }
             }
           },
@@ -101,7 +109,7 @@
             "application/json": {
               "schema": { "$ref": "#/components/schemas/HighlightDualRequest" },
               "example": {
-                "code": "val x = 42",
+                "code": "package com.example\n\nimport kotlinx.coroutines.*\n\ndata class User(val name: String, val age: Int)\n\nfun main() = runBlocking {\n    val users = listOf(\n        User(\"Alice\", 30),\n        User(\"Bob\", 25),\n        User(\"Charlie\", 35)\n    )\n\n    val adults = users.filter { it.age >= 30 }\n    adults.forEach { user ->\n        println(\"${user.name} is ${user.age} years old\")\n    }\n}",
                 "language": "kotlin",
                 "darkTheme": "github-dark",
                 "lightTheme": "github-light"
@@ -111,16 +119,13 @@
         },
         "responses": {
           "200": {
-            "description": "Tokenized code with dual theme colors",
+            "description": "Tokenized code with dark and light color values for each token",
+            "headers": {
+              "Server-Timing": { "$ref": "#/components/headers/ServerTiming" }
+            },
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HighlightDualResponse" },
-                "example": {
-                  "language": "kotlin",
-                  "darkTheme": "github-dark",
-                  "lightTheme": "github-light",
-                  "tokens": [[{ "text": "val", "darkColor": "#F97583", "lightColor": "#D73A49" }]]
-                }
+                "schema": { "$ref": "#/components/schemas/HighlightDualResponse" }
               }
             }
           },
@@ -141,23 +146,21 @@
             "application/json": {
               "schema": { "$ref": "#/components/schemas/HighlightSemanticRequest" },
               "example": {
-                "code": "const x = 1;",
-                "language": "javascript"
+                "code": "import express from 'express';\nimport { readFile } from 'fs/promises';\n\nconst app = express();\nconst PORT = process.env.PORT || 3000;\n\ninterface Config {\n    debug: boolean;\n    maxRetries: number;\n    baseUrl: string;\n}\n\nasync function loadConfig(path: string): Promise<Config> {\n    const raw = await readFile(path, 'utf-8');\n    return JSON.parse(raw) as Config;\n}\n\napp.get('/health', (_req, res) => {\n    res.json({ status: 'ok', timestamp: Date.now() });\n});\n\napp.listen(PORT, () => {\n    console.log(`Server running on port ${PORT}`);\n});",
+                "language": "typescript"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Tokenized code with semantic types",
+            "description": "Tokenized code with semantic type labels for each token",
+            "headers": {
+              "Server-Timing": { "$ref": "#/components/headers/ServerTiming" }
+            },
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HighlightSemanticResponse" },
-                "example": {
-                  "language": "javascript",
-                  "tokenTypes": ["type", "plain", "variable", "keyword", "number", "punctuation"],
-                  "tokens": [[{ "text": "const", "type": "type" }, { "text": " ", "type": "plain" }, { "text": "x", "type": "variable" }]]
-                }
+                "schema": { "$ref": "#/components/schemas/HighlightSemanticResponse" }
               }
             }
           },
@@ -169,14 +172,32 @@
     }
   },
   "components": {
+    "headers": {
+      "ServerTiming": {
+        "description": "Processing time metrics. Always includes `total` duration; includes `tokenizer` duration on highlight endpoints.",
+        "schema": { "type": "string" },
+        "example": "total;dur=15.2, tokenizer;dur=12.6"
+      }
+    },
     "schemas": {
       "HighlightRequest": {
         "type": "object",
         "required": ["code"],
         "properties": {
           "code": { "type": "string", "maxLength": 100000, "description": "Source code to highlight" },
-          "language": { "type": "string", "default": "text", "description": "Language identifier" },
-          "theme": { "type": "string", "default": "github-dark", "description": "Color theme" }
+          "language": {
+            "type": "string",
+            "default": "text",
+            "description": "Language identifier",
+            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql"]
+          },
+          "theme": {
+            "type": "string",
+            "default": "github-dark",
+            "description": "Color theme",
+            "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"]
+          },
+          "debug": { "type": "boolean", "default": false, "description": "When true, includes a _debug object in the response with processing metrics" }
         }
       },
       "HighlightDualRequest": {
@@ -184,9 +205,25 @@
         "required": ["code"],
         "properties": {
           "code": { "type": "string", "maxLength": 100000, "description": "Source code to highlight" },
-          "language": { "type": "string", "default": "text", "description": "Language identifier" },
-          "darkTheme": { "type": "string", "default": "github-dark", "description": "Dark color theme" },
-          "lightTheme": { "type": "string", "default": "github-light", "description": "Light color theme" }
+          "language": {
+            "type": "string",
+            "default": "text",
+            "description": "Language identifier",
+            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql"]
+          },
+          "darkTheme": {
+            "type": "string",
+            "default": "github-dark",
+            "description": "Dark color theme",
+            "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"]
+          },
+          "lightTheme": {
+            "type": "string",
+            "default": "github-light",
+            "description": "Light color theme",
+            "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"]
+          },
+          "debug": { "type": "boolean", "default": false, "description": "When true, includes a _debug object in the response with processing metrics" }
         }
       },
       "HighlightSemanticRequest": {
@@ -194,14 +231,21 @@
         "required": ["code"],
         "properties": {
           "code": { "type": "string", "maxLength": 100000, "description": "Source code to highlight" },
-          "language": { "type": "string", "default": "text", "description": "Language identifier" }
+          "language": {
+            "type": "string",
+            "default": "text",
+            "description": "Language identifier",
+            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql"]
+          },
+          "debug": { "type": "boolean", "default": false, "description": "When true, includes a _debug object in the response with processing metrics" }
         }
       },
       "HighlightResponse": {
         "type": "object",
+        "required": ["language", "theme", "tokens"],
         "properties": {
-          "language": { "type": "string" },
-          "theme": { "type": "string" },
+          "language": { "type": "string", "description": "Language used for tokenization" },
+          "theme": { "type": "string", "description": "Theme used for color resolution" },
           "tokens": {
             "type": "array",
             "description": "Array of lines, each containing an array of tokens",
@@ -209,77 +253,110 @@
               "type": "array",
               "items": {
                 "type": "object",
+                "required": ["text", "color"],
                 "properties": {
-                  "text": { "type": "string" },
-                  "color": { "type": "string", "description": "Hex color code" }
+                  "text": { "type": "string", "description": "Token text content" },
+                  "color": { "type": "string", "description": "Hex color code (e.g. #F97583)" }
                 }
               }
             }
-          }
+          },
+          "_debug": { "$ref": "#/components/schemas/DebugInfo" }
         }
       },
       "HighlightDualResponse": {
         "type": "object",
+        "required": ["language", "darkTheme", "lightTheme", "tokens"],
         "properties": {
-          "language": { "type": "string" },
-          "darkTheme": { "type": "string" },
-          "lightTheme": { "type": "string" },
+          "language": { "type": "string", "description": "Language used for tokenization" },
+          "darkTheme": { "type": "string", "description": "Dark theme used for color resolution" },
+          "lightTheme": { "type": "string", "description": "Light theme used for color resolution" },
           "tokens": {
             "type": "array",
+            "description": "Array of lines, each containing an array of tokens with both dark and light colors",
             "items": {
               "type": "array",
               "items": {
                 "type": "object",
+                "required": ["text", "darkColor", "lightColor"],
                 "properties": {
-                  "text": { "type": "string" },
-                  "darkColor": { "type": "string" },
-                  "lightColor": { "type": "string" }
+                  "text": { "type": "string", "description": "Token text content" },
+                  "darkColor": { "type": "string", "description": "Hex color from dark theme" },
+                  "lightColor": { "type": "string", "description": "Hex color from light theme" }
                 }
               }
             }
-          }
+          },
+          "_debug": { "$ref": "#/components/schemas/DebugInfo" }
         }
       },
       "HighlightSemanticResponse": {
         "type": "object",
+        "required": ["language", "tokenTypes", "tokens"],
         "properties": {
-          "language": { "type": "string" },
-          "tokenTypes": { "type": "array", "items": { "type": "string" } },
+          "language": { "type": "string", "description": "Language used for tokenization" },
+          "tokenTypes": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "List of all semantic token types present in the result"
+          },
           "tokens": {
             "type": "array",
+            "description": "Array of lines, each containing an array of tokens with semantic types",
             "items": {
               "type": "array",
               "items": {
                 "type": "object",
+                "required": ["text", "type"],
                 "properties": {
-                  "text": { "type": "string" },
-                  "type": { "type": "string" }
+                  "text": { "type": "string", "description": "Token text content" },
+                  "type": {
+                    "type": "string",
+                    "description": "Semantic token type",
+                    "enum": ["keyword", "type", "modifier", "function", "tag", "attribute", "parameter", "variable", "number", "constant", "string", "comment", "punctuation", "plain"]
+                  }
                 }
               }
             }
-          }
+          },
+          "_debug": { "$ref": "#/components/schemas/DebugInfo" }
+        }
+      },
+      "DebugInfo": {
+        "type": "object",
+        "description": "Processing metrics, included when debug is set to true in the request body",
+        "required": ["totalMs", "requestBodyBytes"],
+        "properties": {
+          "totalMs": { "type": "number", "description": "Total request processing time in milliseconds", "example": 15.2 },
+          "tokenizerMs": { "type": "number", "description": "Time spent in the Shiki tokenizer in milliseconds", "example": 12.6 },
+          "requestBodyBytes": { "type": "integer", "description": "Size of the request body in bytes", "example": 342 },
+          "language": { "type": "string", "description": "Language echoed from request" },
+          "theme": { "type": "string", "description": "Theme echoed from request (single theme)" },
+          "darkTheme": { "type": "string", "description": "Dark theme echoed from request (dual theme)" },
+          "lightTheme": { "type": "string", "description": "Light theme echoed from request (dual theme)" }
         }
       },
       "ErrorResponse": {
         "type": "object",
+        "required": ["error"],
         "properties": {
-          "error": { "type": "string" },
-          "details": { "type": "string" }
+          "error": { "type": "string", "description": "Error message" },
+          "details": { "type": "string", "description": "Additional details about the error" }
         }
       }
     },
     "responses": {
       "BadRequest": {
-        "description": "Bad request (invalid body, unsupported language/theme)",
+        "description": "Bad request — invalid body, unsupported language, or unsupported theme",
         "content": {
           "application/json": {
             "schema": { "$ref": "#/components/schemas/ErrorResponse" },
-            "example": { "error": "Unsupported language: brainfuck", "details": "Supported languages: kotlin, java, ..." }
+            "example": { "error": "Unsupported language: brainfuck", "details": "Supported languages: kotlin, java, python, javascript, typescript, swift, go, rust, json, yaml, bash, sql, html, css, c, cpp, ruby, php, markdown, xml, toml, dockerfile, graphql" }
           }
         }
       },
       "PayloadTooLarge": {
-        "description": "Request body exceeds 200KB",
+        "description": "Request body exceeds the 200KB limit",
         "content": {
           "application/json": {
             "schema": { "$ref": "#/components/schemas/ErrorResponse" },

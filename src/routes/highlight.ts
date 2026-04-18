@@ -12,7 +12,7 @@ app.post("/highlight", async (c) => {
     return badRequest(c, "Invalid request", parsed.error.message);
   }
 
-  const { code, language, theme } = parsed.data;
+  const { code, language, theme, debug } = parsed.data;
   const languages = getSupportedLanguages();
   const themes = getSupportedThemes();
 
@@ -31,7 +31,7 @@ app.post("/highlight", async (c) => {
     const tokens = result.map((line) =>
       line.map((token) => ({ text: token.content, color: token.color || "" }))
     );
-    return c.json(withDebug(c, { language, theme, tokens }, { language, theme }));
+    return c.json(withDebug(c, { language, theme, tokens }, debug, { language, theme }));
   } catch (e) {
     return internalError(c, "Highlighting failed");
   }
