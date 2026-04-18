@@ -1,3 +1,13 @@
+// Shiki highlighter setup using the pre-compiled JavaScript regex engine.
+//
+// Shiki's default engine compiles Oniguruma (a Ruby regex library) to WASM.
+// Cloudflare Workers blocks WebAssembly.instantiate(), so we use the JS engine
+// with pre-compiled grammars (@shikijs/langs-precompiled) instead. Pre-compiled
+// grammars have their Oniguruma patterns already transpiled to native JS RegExp
+// at build time, eliminating both WASM loading and runtime regex transpilation.
+//
+// See: https://shiki.style/guide/regex-engines
+
 import { createHighlighterCore } from "shiki/core";
 import { createJavaScriptRawEngine } from "shiki/engine/javascript";
 
@@ -49,6 +59,8 @@ const THEME_NAMES = [
   "github-dark", "github-light", "one-dark-pro", "dracula", "min-light",
 ];
 
+// Singleton: reusing prevents ~500ms+ re-initialization per request.
+// Reset to null on failure so the next request retries.
 let highlighterPromise: ReturnType<typeof createHighlighterCore> | null = null;
 
 export function getHighlighter() {
@@ -57,6 +69,7 @@ export function getHighlighter() {
     highlighterPromise = createHighlighterCore({
       themes: [...SUPPORTED_THEMES],
       langs: [...SUPPORTED_LANGS],
+      // JS engine instead of WASM — required for Cloudflare Workers which blocks WebAssembly.instantiate()
       engine: createJavaScriptRawEngine(),
     }).then((h) => {
       console.log("Shiki highlighter initialized successfully");

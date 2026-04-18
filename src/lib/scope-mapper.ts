@@ -1,3 +1,6 @@
+// Maps TextMate scope prefixes to semantic token types.
+// Order matters: more specific prefixes (e.g. "storage.type") must come before
+// broader ones (e.g. "variable") to match correctly.
 const SCOPE_RULES: [string, string][] = [
   ["keyword", "keyword"],
   ["storage.type", "type"],
@@ -19,10 +22,12 @@ const SCOPE_RULES: [string, string][] = [
   ["support.type", "type"],
 ];
 
+// Iterates scopes from most-specific to least-specific (reversed) because
+// Shiki provides scopes as a hierarchy where the last item is most specific.
 export function mapScopeToTokenType(scopes: string[]): string {
-  for (const scope of scopes.reverse()) {
+  for (let i = scopes.length - 1; i >= 0; i--) {
     for (const [prefix, tokenType] of SCOPE_RULES) {
-      if (scope.startsWith(prefix)) {
+      if (scopes[i].startsWith(prefix)) {
         return tokenType;
       }
     }

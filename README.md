@@ -78,6 +78,7 @@ curl -X POST https://your-host/highlight \
 | `code` | string | yes | — |
 | `language` | string | no | `"text"` |
 | `theme` | string | no | `"github-dark"` |
+| `debug` | boolean | no | `false` |
 
 ### `POST /highlight/dual`
 
@@ -119,6 +120,7 @@ curl -X POST https://your-host/highlight/dual \
 | `language` | string | no | `"text"` |
 | `darkTheme` | string | no | `"github-dark"` |
 | `lightTheme` | string | no | `"github-light"` |
+| `debug` | boolean | no | `false` |
 
 ### `POST /highlight/semantic`
 
@@ -155,6 +157,27 @@ curl -X POST https://your-host/highlight/semantic \
   ]
 }
 ```
+
+### Debug Mode
+
+All highlight endpoints accept `"debug": true` in the request body to include processing metrics. The response will contain a `_debug` object:
+
+```json
+{
+  "language": "kotlin",
+  "theme": "github-dark",
+  "tokens": [ ... ],
+  "_debug": {
+    "totalMs": 1.2,
+    "tokenizerMs": 0.2,
+    "requestBodyBytes": 55,
+    "language": "kotlin",
+    "theme": "github-dark"
+  }
+}
+```
+
+A `Server-Timing` header is also included on every highlight response (regardless of debug flag) for use with browser DevTools or monitoring.
 
 ### `GET /languages`
 
@@ -211,9 +234,25 @@ npm run build
 PORT=3000 node dist/index.js
 ```
 
+## Architecture
+
+### Why the JavaScript Regex Engine?
+
+Shiki uses [TextMate grammars](https://macromates.com/manual/en/language_grammars) which rely on [Oniguruma](https://github.com/kkos/oniguruma), a regex engine from Ruby. Shiki's default engine compiles Oniguruma to WebAssembly, which works on Node.js but **fails on Cloudflare Workers** with `WebAssembly.instantiate(): Wasm code generation disallowed by embedder`.
+
+This service uses Shiki's [pre-compiled JavaScript regex engine](https://shiki.style/guide/regex-engines) (`@shikijs/langs-precompiled` + `createJavaScriptRawEngine`) instead. This approach:
+
+- **Works everywhere** — no WASM dependency, runs on Workers, Node.js, and any JS runtime
+- **Fastest cold start** — grammar patterns are pre-transpiled at build time, so there's zero regex compilation at runtime
+- **Tiny footprint** — ~3 KB engine vs ~456 KB WASM binary
+- **Full language support** — all built-in Shiki languages are supported as of v3.9.1
+
+The tradeoff is slightly less regex accuracy for edge-case grammars (e.g., C++ can exhibit backtracking), but for the 23 mainstream languages supported by this service, results are identical to the WASM engine.
+
 ## Tech Stack
 
 - **Framework**: [Hono](https://hono.dev/) (portable across runtimes)
 - **Highlighting**: [Shiki](https://shiki.style/) (TextMate grammar-based, same engine as VS Code)
+- **Regex Engine**: [Pre-compiled JavaScript](https://shiki.style/guide/regex-engines) (via `@shikijs/langs-precompiled`)
 - **Validation**: [Zod](https://zod.dev/)
 - **Language**: TypeScript

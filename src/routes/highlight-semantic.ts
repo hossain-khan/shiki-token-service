@@ -23,6 +23,8 @@ app.post("/highlight/semantic", async (c) => {
   try {
     const highlighter = await getHighlighter();
     const t0 = performance.now();
+    // Theme is arbitrary here — semantic types come from scope analysis, not colors.
+    // includeExplanation is required to get the TextMate scope hierarchy for mapping.
     const result = highlighter.codeToTokens(code, {
       lang: language as any,
       theme: "github-dark" as any,
