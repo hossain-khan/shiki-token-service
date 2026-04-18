@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "engines": {
-    "node": ">=20"
+    "node": "24.x"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,7 @@
   "description": "Syntax highlighting microservice using Shiki",
   "dependencies": {
     "@hono/node-server": "^1.19.14",
+    "@shikijs/langs-precompiled": "^4.0.2",
     "hono": "^4.12.14",
     "shiki": "^4.0.2",
     "zod": "^4.3.6"
