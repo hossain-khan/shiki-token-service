@@ -266,17 +266,17 @@ dependencyResolutionManagement {
 // build.gradle.kts — pick the artifact for your target:
 dependencies {
     // Android projects
-    implementation("com.github.hossain-khan.shiki-token-service:sdk-android:sdk-1.0.3")
+    implementation("com.github.hossain-khan.shiki-token-service:sdk-android:sdk-1.0.5")
 
     // JVM projects (non-Android)
-    implementation("com.github.hossain-khan.shiki-token-service:sdk-jvm:sdk-1.0.3")
+    implementation("com.github.hossain-khan.shiki-token-service:sdk-jvm:sdk-1.0.5")
 
     // KMP projects (includes metadata for all targets)
-    implementation("com.github.hossain-khan.shiki-token-service:sdk:sdk-1.0.3")
+    implementation("com.github.hossain-khan.shiki-token-service:sdk:sdk-1.0.5")
 }
 ```
 
-> Latest release: `sdk-1.0.3`. For JitPack multi-module projects the group id uses dots (`com.github.User.Repo`) and the artifact is the module name (`sdk-android`, `sdk-jvm`, or `sdk`).
+> Latest release: `sdk-1.0.5`. For JitPack multi-module projects the group id uses dots (`com.github.User.Repo`) and the artifact is the module name (`sdk-android`, `sdk-jvm`, or `sdk`).
 
 ### Usage
 
@@ -286,7 +286,7 @@ import dev.hossain.shiki.model.HighlightRequest
 import dev.hossain.shiki.model.Language
 import dev.hossain.shiki.model.Theme
 
-val client = ShikiClient(baseUrl = "https://your-host/")
+val client = ShikiClient(baseUrl = "https://syntax-highlight.gohk.xyz")
 
 // Single theme
 val result = client.highlight(

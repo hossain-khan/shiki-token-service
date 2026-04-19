@@ -18,7 +18,7 @@ import io.ktor.client.HttpClient
  *
  * ### Basic usage
  * ```kotlin
- * val client = ShikiClient("https://your-host/")
+ * val client = ShikiClient("https://syntax-highlight.gohk.xyz")
  *
  * val result = client.highlight(
  *     HighlightRequest(code = "fun main() {}", language = Language.KOTLIN)
@@ -34,11 +34,12 @@ import io.ktor.client.HttpClient
  * ### Providing a custom HttpClient
  * ```kotlin
  * val myClient = HttpClient(OkHttp) { /* custom config */ }
- * val client = ShikiClient("https://your-host/", httpClient = myClient)
+ * val client = ShikiClient("https://syntax-highlight.gohk.xyz", httpClient = myClient)
  * // ShikiClient will NOT close myClient on close() — you own it.
  * ```
  *
- * @param baseUrl Base URL of the deployed Shiki Token Service, e.g. `https://your-host/`.
+ * @param baseUrl Base URL of the deployed Shiki Token Service,
+ *   e.g. `https://syntax-highlight.gohk.xyz` (the public instance).
  * @param httpClient Optional custom [HttpClient]. Must have [ContentNegotiation] and
  *   [HttpTimeout] configured. If null, a default client is created and owned by this instance.
  */
