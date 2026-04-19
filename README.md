@@ -249,6 +249,78 @@ This service uses Shiki's [pre-compiled JavaScript regex engine](https://shiki.s
 
 The tradeoff is slightly less regex accuracy for edge-case grammars (e.g., C++ can exhibit backtracking), but for the 23 mainstream languages supported by this service, results are identical to the WASM engine.
 
+## Kotlin / Android SDK
+
+A Kotlin Multiplatform client library for the Shiki Token Service is available in the [`sdk/`](./sdk) subdirectory. It targets **JVM and Android** and uses only KMP-compatible libraries (`ktor-client`, `kotlinx.serialization`).
+
+### Add via JitPack
+
+```kotlin
+// settings.gradle.kts
+dependencyResolutionManagement {
+    repositories {
+        maven("https://jitpack.io")
+    }
+}
+
+// build.gradle.kts
+dependencies {
+    implementation("com.github.hossain-khan:shiki-token-service:sdk:<tag>")
+}
+```
+
+> Replace `<tag>` with a release tag, e.g. `sdk-1.0.0`. See [JitPack multi-module docs](https://jitpack.io/docs/BUILDING/#multi-module-projects) for details.
+
+### Usage
+
+```kotlin
+import dev.hossain.shiki.ShikiClient
+import dev.hossain.shiki.model.HighlightRequest
+import dev.hossain.shiki.model.Language
+import dev.hossain.shiki.model.Theme
+
+val client = ShikiClient(baseUrl = "https://your-host/")
+
+// Single theme
+val result = client.highlight(
+    HighlightRequest(
+        code = "fun main() { println(\"Hello\") }",
+        language = Language.KOTLIN,
+        theme = Theme.GITHUB_DARK,
+    )
+)
+result.onSuccess { response ->
+    response.tokens.forEach { line ->
+        line.forEach { token -> print(token.text) }
+        println()
+    }
+}
+result.onFailure { error -> println("Error: $error") }
+
+// Dark + light themes in one request
+val dual = client.highlightDual(
+    HighlightDualRequest(code = "val x = 42", language = Language.KOTLIN)
+)
+
+// Semantic token types (keyword, function, string, …)
+val semantic = client.highlightSemantic(
+    HighlightSemanticRequest(code = "const x = 1;", language = Language.JAVASCRIPT)
+)
+
+client.close()
+```
+
+All `ShikiClient` methods are `suspend` functions and return `kotlin.Result<T>`, so failures (network errors, unsupported language/theme, etc.) are surfaced without exceptions.
+
+### SDK Tech Stack
+
+- **HTTP**: [ktor-client](https://ktor.io/docs/client-create-multiplatform-application.html) — OkHttp engine on Android, CIO on JVM
+- **JSON**: [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization)
+- **Coroutines**: [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+- **Published via**: [JitPack](https://jitpack.io)
+
+---
+
 ## Tech Stack
 
 - **Framework**: [Hono](https://hono.dev/) (portable across runtimes)
