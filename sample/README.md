@@ -1,4 +1,4 @@
-# Shiki Token Service — SDK Sample
+# Shiki Token Service - SDK Sample
 
 A Kotlin JVM application that demonstrates all five endpoints of the
 [Shiki Token Service](../README.md) using the KMP SDK published via JitPack.
@@ -26,7 +26,7 @@ If the server is unreachable the app prints a clear error and exits cleanly afte
 
 ### 1. Start the Shiki Token Service
 
-The sample defaults to the live deployed instance at **https://syntax-highlight.gohk.xyz** —
+The sample defaults to the live deployed instance at **https://syntax-highlight.gohk.xyz** -
 no local setup needed.
 
 To run against a local instance instead:
@@ -39,7 +39,7 @@ npm start        # starts on http://localhost:3000
 ### 2. Run the sample
 
 ```bash
-# From the repository root — uses live server by default
+# From the repository root - uses live server by default
 ./gradlew :sample:run
 
 # Override with a local or different instance
@@ -50,7 +50,7 @@ SHIKI_BASE_URL=http://localhost:3000 ./gradlew :sample:run
 
 ```
 ╔══════════════════════════════════════╗
-║   Shiki Token Service — SDK Sample   ║
+║   Shiki Token Service - SDK Sample   ║
 ╚══════════════════════════════════════╝
 Server: https://syntax-highlight.gohk.xyz
 
@@ -61,17 +61,17 @@ Server: https://syntax-highlight.gohk.xyz
   languages: kotlin, javascript, typescript, ...
   themes:    github-dark, github-light, ...
 
-▶ Highlight — Kotlin / github-dark
+▶ Highlight - Kotlin / github-dark
   language=kotlin  theme=github-dark  lines=3
   Line 1: "fun greet(name: String): String {"  (first token color: #ff7b72)
   ...
 
-▶ Dual Theme — kotlin / github-dark + github-light
+▶ Dual Theme - kotlin / github-dark + github-light
   darkTheme=github-dark  lightTheme=github-light
   'val' dark=#ff7b72  light=#cf222e
   ...
 
-▶ Semantic Tokens — JavaScript
+▶ Semantic Tokens - JavaScript
   token types used: keyword, variable, parameter, ...
   'const' → keyword
   ...

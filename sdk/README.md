@@ -1,4 +1,4 @@
-# Shiki Token Service — Kotlin SDK
+# Shiki Token Service - Kotlin SDK
 
 A Kotlin Multiplatform (KMP) client library for the
 [Shiki Token Service](../README.md) API. Targets **Android** and **JVM**, using only
@@ -65,7 +65,7 @@ result.onFailure { error -> println("Error: $error") }
 client.close()
 ```
 
-All `ShikiClient` methods are `suspend` functions and return `kotlin.Result<T>` —
+All `ShikiClient` methods are `suspend` functions and return `kotlin.Result<T>` -
 failures (network errors, unsupported language/theme) surface as `Result.failure`
 without throwing exceptions.
 
@@ -87,7 +87,7 @@ without throwing exceptions.
 #### `HighlightRequest`
 | Field | Type | Required | Default |
 |-------|------|----------|---------|
-| `code` | `String` | ✅ | — |
+| `code` | `String` | ✅ | - |
 | `language` | `String` | ➖ | `"text"` |
 | `theme` | `String` | ➖ | `"github-dark"` |
 | `debug` | `Boolean` | ➖ | `false` |
@@ -95,7 +95,7 @@ without throwing exceptions.
 #### `HighlightDualRequest`
 | Field | Type | Required | Default |
 |-------|------|----------|---------|
-| `code` | `String` | ✅ | — |
+| `code` | `String` | ✅ | - |
 | `language` | `String` | ➖ | `"text"` |
 | `darkTheme` | `String` | ➖ | `"github-dark"` |
 | `lightTheme` | `String` | ➖ | `"github-light"` |
@@ -104,7 +104,7 @@ without throwing exceptions.
 #### `HighlightSemanticRequest`
 | Field | Type | Required | Default |
 |-------|------|----------|---------|
-| `code` | `String` | ✅ | — |
+| `code` | `String` | ✅ | - |
 | `language` | `String` | ➖ | `"text"` |
 | `debug` | `Boolean` | ➖ | `false` |
 
@@ -148,14 +148,14 @@ val myClient = HttpClient(OkHttp) {
     install(ContentNegotiation) { json() }
 }
 val client = ShikiClient("https://syntax-highlight.gohk.xyz", httpClient = myClient)
-// ShikiClient will NOT close myClient — you own its lifecycle.
+// ShikiClient will NOT close myClient - you own its lifecycle.
 ```
 
 ## Tech Stack
 
 | Concern | Library |
 |---------|---------|
-| HTTP | [ktor-client](https://ktor.io/docs/client-create-multiplatform-application.html) — OkHttp on Android, CIO on JVM |
+| HTTP | [ktor-client](https://ktor.io/docs/client-create-multiplatform-application.html) - OkHttp on Android, CIO on JVM |
 | JSON | [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) |
 | Coroutines | [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines) |
 | Publishing | [JitPack](https://jitpack.io/#hossain-khan/shiki-token-service) |
@@ -184,5 +184,5 @@ sdk/
 
 ## See also
 
-- [Root README](../README.md) — API documentation and service deployment
-- [sample/](../sample/) — Runnable JVM app demonstrating all SDK endpoints
+- [Root README](../README.md) - API documentation and service deployment
+- [sample/](../sample/) - Runnable JVM app demonstrating all SDK endpoints

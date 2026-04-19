@@ -75,14 +75,14 @@ curl -X POST https://your-host/highlight \
 
 | Field | Type | Required | Default |
 |-------|------|----------|---------|
-| `code` | string | yes | — |
+| `code` | string | yes | - |
 | `language` | string | no | `"text"` |
 | `theme` | string | no | `"github-dark"` |
 | `debug` | boolean | no | `false` |
 
 ### `POST /highlight/dual`
 
-Tokenizes code with both dark and light themes in a single request — useful for apps that support both modes.
+Tokenizes code with both dark and light themes in a single request - useful for apps that support both modes.
 
 **Request:**
 
@@ -116,7 +116,7 @@ curl -X POST https://your-host/highlight/dual \
 
 | Field | Type | Required | Default |
 |-------|------|----------|---------|
-| `code` | string | yes | — |
+| `code` | string | yes | - |
 | `language` | string | no | `"text"` |
 | `darkTheme` | string | no | `"github-dark"` |
 | `lightTheme` | string | no | `"github-light"` |
@@ -124,7 +124,7 @@ curl -X POST https://your-host/highlight/dual \
 
 ### `POST /highlight/semantic`
 
-Returns token types (keyword, function, string, etc.) instead of colors — useful when the client app manages its own color palette.
+Returns token types (keyword, function, string, etc.) instead of colors - useful when the client app manages its own color palette.
 
 **Request:**
 
@@ -242,10 +242,10 @@ Shiki uses [TextMate grammars](https://macromates.com/manual/en/language_grammar
 
 This service uses Shiki's [pre-compiled JavaScript regex engine](https://shiki.style/guide/regex-engines) (`@shikijs/langs-precompiled` + `createJavaScriptRawEngine`) instead. This approach:
 
-- **Works everywhere** — no WASM dependency, runs on Workers, Node.js, and any JS runtime
-- **Fastest cold start** — grammar patterns are pre-transpiled at build time, so there's zero regex compilation at runtime
-- **Tiny footprint** — ~3 KB engine vs ~456 KB WASM binary
-- **Full language support** — all built-in Shiki languages are supported as of v3.9.1
+- **Works everywhere** - no WASM dependency, runs on Workers, Node.js, and any JS runtime
+- **Fastest cold start** - grammar patterns are pre-transpiled at build time, so there's zero regex compilation at runtime
+- **Tiny footprint** - ~3 KB engine vs ~456 KB WASM binary
+- **Full language support** - all built-in Shiki languages are supported as of v3.9.1
 
 The tradeoff is slightly less regex accuracy for edge-case grammars (e.g., C++ can exhibit backtracking), but for the 23 mainstream languages supported by this service, results are identical to the WASM engine.
 
@@ -263,7 +263,7 @@ dependencyResolutionManagement {
     }
 }
 
-// build.gradle.kts — pick the artifact for your target:
+// build.gradle.kts - pick the artifact for your target:
 dependencies {
     // Android projects
     implementation("com.github.hossain-khan.shiki-token-service:sdk-android:sdk-1.0.5")
@@ -321,7 +321,7 @@ All `ShikiClient` methods are `suspend` functions and return `kotlin.Result<T>`,
 
 ### SDK Tech Stack
 
-- **HTTP**: [ktor-client](https://ktor.io/docs/client-create-multiplatform-application.html) — OkHttp engine on Android, CIO on JVM
+- **HTTP**: [ktor-client](https://ktor.io/docs/client-create-multiplatform-application.html) - OkHttp engine on Android, CIO on JVM
 - **JSON**: [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization)
 - **Coroutines**: [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
 - **Published via**: [JitPack](https://jitpack.io)

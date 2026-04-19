@@ -1,10 +1,10 @@
-# KMP TextMate Syntax Highlighter — Detailed Implementation Plan
+# KMP TextMate Syntax Highlighter - Detailed Implementation Plan
 
 ## Project Overview
 
 Build a Kotlin Multiplatform library (`kmp-textmate`) that tokenizes source code using TextMate grammars and VS Code themes. Targets: Android (JVM/ART), iOS (Kotlin/Native), Desktop (JVM).
 
-**Key reference:** [kotlin-textmate](https://github.com/ivan-magda/kotlin-textmate) — an existing JVM-only implementation using joni. Our work extracts the common logic and adds iOS support via Oniguruma cinterop.
+**Key reference:** [kotlin-textmate](https://github.com/ivan-magda/kotlin-textmate) - an existing JVM-only implementation using joni. Our work extracts the common logic and adds iOS support via Oniguruma cinterop.
 
 ---
 
@@ -168,7 +168,7 @@ make && make install
 
 ---
 
-## Step 2: Regex Engine — `expect`/`actual`
+## Step 2: Regex Engine - `expect`/`actual`
 
 ### Common API (`commonMain`)
 
@@ -205,7 +205,7 @@ data class ScannerMatch(
 ### JVM/Android `actual` (joni)
 
 ```kotlin
-// androidMain (and desktopMain) — regex/OnigRegex.android.kt
+// androidMain (and desktopMain) - regex/OnigRegex.android.kt
 package com.example.textmate.regex
 
 import org.jruby.joni.Regex as JoniRegex
@@ -279,7 +279,7 @@ actual class OnigScanner actual constructor(private val patterns: List<String>) 
 ### iOS `actual` (Oniguruma cinterop)
 
 ```kotlin
-// iosMain — regex/OnigRegex.ios.kt
+// iosMain - regex/OnigRegex.ios.kt
 package com.example.textmate.regex
 
 import kotlinx.cinterop.*
@@ -511,7 +511,7 @@ class Tokenizer(
                     currentState = currentState.pop()
                 }
                 matchedRule.isMatchRule() -> {
-                    // Simple match — emit token with scope
+                    // Simple match - emit token with scope
                     val scopes = currentState.scopeStack().map { it.value } +
                         (matchedRule.name ?: "")
                     tokens.add(Token(matchStart, matchEnd, scopes))
@@ -633,7 +633,7 @@ class ThemeTrie {
 ## Step 6: High-Level API
 
 ```kotlin
-// Highlighter.kt — the main public API
+// Highlighter.kt - the main public API
 class Highlighter private constructor(
     private val grammarRepository: GrammarRepository,
     private val theme: Theme,

@@ -35,7 +35,7 @@ import io.ktor.client.HttpClient
  * ```kotlin
  * val myClient = HttpClient(OkHttp) { /* custom config */ }
  * val client = ShikiClient("https://syntax-highlight.gohk.xyz", httpClient = myClient)
- * // ShikiClient will NOT close myClient on close() — you own it.
+ * // ShikiClient will NOT close myClient on close() - you own it.
  * ```
  *
  * @param baseUrl Base URL of the deployed Shiki Token Service,

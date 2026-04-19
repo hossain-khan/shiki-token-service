@@ -1,10 +1,10 @@
-# KMP TextMate Syntax Highlighter — Roadmap
+# KMP TextMate Syntax Highlighter - Roadmap
 
 A Kotlin Multiplatform library that provides VS Code-quality syntax highlighting using TextMate grammars, targeting Android, iOS, and Desktop (JVM).
 
 ## Key Discovery
 
-**[kotlin-textmate](https://github.com/ivan-magda/kotlin-textmate)** already exists as a JVM-only TextMate grammar engine using joni. It provides a working tokenizer, theme resolver, and Compose integration — but only for JVM/Android. The KMP effort is primarily about making this architecture multiplatform.
+**[kotlin-textmate](https://github.com/ivan-magda/kotlin-textmate)** already exists as a JVM-only TextMate grammar engine using joni. It provides a working tokenizer, theme resolver, and Compose integration - but only for JVM/Android. The KMP effort is primarily about making this architecture multiplatform.
 
 ---
 
@@ -21,7 +21,7 @@ A Kotlin Multiplatform library that provides VS Code-quality syntax highlighting
 **Dependencies:** joni (Maven Central: `org.jruby.joni:joni:2.2.7`), Oniguruma C library (v6.9.10)
 
 **Risks:**
-- Joni and Oniguruma C may have subtle behavioral differences — need extensive cross-platform regex tests
+- Joni and Oniguruma C may have subtle behavioral differences - need extensive cross-platform regex tests
 - Kotlin/Native cinterop memory management (manual `memScoped` blocks)
 
 ---
@@ -32,14 +32,14 @@ A Kotlin Multiplatform library that provides VS Code-quality syntax highlighting
 | Task | Description | Effort |
 |------|-------------|--------|
 | Port grammar parser | Parse `.tmLanguage.json` into `IRawGrammar` data classes (patterns, repository, captures, begin/end rules) | 1 week |
-| Port tokenization state machine | `Grammar.tokenizeLine()` with scope stack, rule matching, begin/end handling — reference vscode-textmate (~1500 lines TS) and kotlin-textmate | 2-3 weeks |
+| Port tokenization state machine | `Grammar.tokenizeLine()` with scope stack, rule matching, begin/end handling - reference vscode-textmate (~1500 lines TS) and kotlin-textmate | 2-3 weeks |
 | `StateStack` implementation | Immutable functional data structure carrying rule context across lines | 3-4 days |
 | Grammar includes/injection | Support `include: "#rule"`, `include: "source.other"`, and grammar injection | 3-4 days |
 | Performance tuning | Regex caching, compiled rule memoization, target ~10,000+ lines/sec | 3-4 days |
 
 **Dependencies:** Milestone 1 (regex engine)
 
-**Key reference:** [vscode-textmate](https://github.com/microsoft/vscode-textmate) (grammar.ts, rule.ts, matcher.ts — the canonical implementation)
+**Key reference:** [vscode-textmate](https://github.com/microsoft/vscode-textmate) (grammar.ts, rule.ts, matcher.ts - the canonical implementation)
 
 ---
 
@@ -101,12 +101,12 @@ A Kotlin Multiplatform library that provides VS Code-quality syntax highlighting
 
 | Milestone | Effort | Can Parallelize With |
 |-----------|--------|---------------------|
-| 1. Regex Engine Abstraction | 2-3 weeks | — |
+| 1. Regex Engine Abstraction | 2-3 weeks | - |
 | 2. Grammar Engine | 4-6 weeks | Milestone 3 |
 | 3. Theme Engine | 1-2 weeks | Milestone 2 |
-| 4. Grammar Bundling | 1-2 weeks | — |
-| 5. Compose UI Integration | 2-3 weeks | — |
-| 6. Testing, Docs & Release | 2-3 weeks | — |
+| 4. Grammar Bundling | 1-2 weeks | - |
+| 5. Compose UI Integration | 2-3 weeks | - |
+| 6. Testing, Docs & Release | 2-3 weeks | - |
 
 **Total estimate: 12-19 weeks** (3-5 months) for a single developer
 
@@ -118,11 +118,11 @@ A Kotlin Multiplatform library that provides VS Code-quality syntax highlighting
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Joni vs Oniguruma behavioral differences | High — tokens differ across platforms | Extensive regex test suite; document known divergences |
-| Oniguruma C library iOS build issues | Medium — blocks iOS target | Pre-build `.xcframework` via CocoaPods; fallback to ICU regex with reduced grammar support |
-| kotlin-textmate is JVM-only, hard to extract | Medium — more porting work | Fork and refactor incrementally; keep JVM working while extracting common |
-| Performance on iOS (cinterop overhead) | Medium — slower than JVM | Profile early; batch regex calls; consider regex result caching |
-| TextMate grammar edge cases | Low — most grammars work, some don't | Prioritize top 20 languages; document unsupported constructs |
+| Joni vs Oniguruma behavioral differences | High - tokens differ across platforms | Extensive regex test suite; document known divergences |
+| Oniguruma C library iOS build issues | Medium - blocks iOS target | Pre-build `.xcframework` via CocoaPods; fallback to ICU regex with reduced grammar support |
+| kotlin-textmate is JVM-only, hard to extract | Medium - more porting work | Fork and refactor incrementally; keep JVM working while extracting common |
+| Performance on iOS (cinterop overhead) | Medium - slower than JVM | Profile early; batch regex calls; consider regex result caching |
+| TextMate grammar edge cases | Low - most grammars work, some don't | Prioritize top 20 languages; document unsupported constructs |
 
 ---
 

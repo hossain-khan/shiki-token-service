@@ -16,7 +16,7 @@ private val BASE_URL = System.getenv("SHIKI_BASE_URL") ?: "https://syntax-highli
 
 fun main() = runBlocking {
     println("╔══════════════════════════════════════╗")
-    println("║   Shiki Token Service — SDK Sample   ║")
+    println("║   Shiki Token Service - SDK Sample   ║")
     println("╚══════════════════════════════════════╝")
     println("Server: $BASE_URL\n")
 
@@ -42,7 +42,7 @@ fun main() = runBlocking {
     }.onFailure { println("  ✗ $it") }
 
     // ── 3. Single-theme highlight ─────────────────────────────────────────────
-    println("\n▶ Highlight — Kotlin / github-dark")
+    println("\n▶ Highlight - Kotlin / github-dark")
     val kotlinCode = """
         fun greet(name: String): String {
             return "Hello, ${'$'}name!"
@@ -65,7 +65,7 @@ fun main() = runBlocking {
     }.onFailure { println("  ✗ $it") }
 
     // ── 4. Dual-theme highlight ───────────────────────────────────────────────
-    println("\n▶ Dual Theme — kotlin / github-dark + github-light")
+    println("\n▶ Dual Theme - kotlin / github-dark + github-light")
     client.highlightDual(
         HighlightDualRequest(
             code = "val answer = 42",
@@ -79,7 +79,7 @@ fun main() = runBlocking {
     }.onFailure { println("  ✗ $it") }
 
     // ── 5. Semantic tokens ────────────────────────────────────────────────────
-    println("\n▶ Semantic Tokens — JavaScript")
+    println("\n▶ Semantic Tokens - JavaScript")
     client.highlightSemantic(
         HighlightSemanticRequest(
             code = "const add = (a, b) => a + b;",

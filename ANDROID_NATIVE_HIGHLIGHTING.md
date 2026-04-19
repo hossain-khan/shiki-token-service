@@ -1,13 +1,13 @@
-# Android Native Syntax Highlighting — Assessment
+# Android Native Syntax Highlighting - Assessment
 
 Evaluating native on-device syntax highlighting for Android using [kotlin-textmate](https://github.com/ivan-magda/kotlin-textmate) as an alternative (or complement) to the Shiki Token Service.
 
 ## Why Native Highlighting?
 
 The Shiki Token Service works well but requires network connectivity. A native library enables:
-- **Offline support** — highlight code without a server
-- **Lower latency** — ~12ms vs ~50-200ms (network round trip)
-- **No server dependency** — no cold starts, no downtime concerns
+- **Offline support** - highlight code without a server
+- **Lower latency** - ~12ms vs ~50-200ms (network round trip)
+- **No server dependency** - no cold starts, no downtime concerns
 
 ## kotlin-textmate Overview
 
@@ -27,10 +27,10 @@ A pure Kotlin/JVM port of VS Code's `vscode-textmate` engine. Uses [joni](https:
 
 ### Modules
 
-- **core** — Grammar parsing, tokenization state machine, theme engine
-- **compose-ui** — Jetpack Compose `CodeBlock` with `AnnotatedString` rendering
-- **sample-app** — Android demo
-- **benchmark** — JMH performance suite
+- **core** - Grammar parsing, tokenization state machine, theme engine
+- **compose-ui** - Jetpack Compose `CodeBlock` with `AnnotatedString` rendering
+- **sample-app** - Android demo
+- **benchmark** - JMH performance suite
 
 ### Usage
 
@@ -52,7 +52,7 @@ for (line in code.lines()) {
 | Dependency | Size | Notes |
 |-----------|------|-------|
 | **joni** (Oniguruma regex) | ~225 KB | Core regex engine |
-| **jcodings** (encoding tables) | ~1.7 MB | Unicode/encoding data — largest piece |
+| **jcodings** (encoding tables) | ~1.7 MB | Unicode/encoding data - largest piece |
 | **gson** (JSON parsing) | ~290 KB | Grammar/theme JSON parsing |
 | **kotlin-textmate core** | ~50-100 KB | The library itself |
 | **Grammar files** (bundled) | ~50-500 KB | Depends on language count |
@@ -62,8 +62,8 @@ for (line in code.lines()) {
 
 ### Concerns
 
-- **jcodings** includes encoding tables for CJK, ISO-8859, etc. — mostly unused for UTF-8 workloads but bundled entirely
-- **gson** — if the app already uses Moshi or kotlinx.serialization, this adds a second JSON library
+- **jcodings** includes encoding tables for CJK, ISO-8859, etc. - mostly unused for UTF-8 workloads but bundled entirely
+- **gson** - if the app already uses Moshi or kotlinx.serialization, this adds a second JSON library
 
 ## Runtime Performance
 
@@ -74,16 +74,16 @@ for (line in code.lines()) {
 | **JSON tokenization** | ~457,600 lines/sec (2.2ms per 1,000 lines) |
 | **JavaScript tokenization** | ~10,300 lines/sec (97.1ms per 1,000 lines) |
 | **Memory per grammar** | ~1-2 MB (compiled rules + regex cache) |
-| **Thread safety** | Not thread-safe — one Grammar instance per thread |
+| **Thread safety** | Not thread-safe - one Grammar instance per thread |
 
 ## Known Limitations
 
-- **No injection grammars** — parsed but not evaluated
-- **Joni regex constraints** — backreferences in lookbehind assertions fail gracefully
-- **JVM/Android only** — no iOS or KMP support
-- **No incremental tokenization** — full file re-tokenization on changes
-- **Not on Maven Central** — must use JitPack, git submodule, or local fork
-- **No ProGuard rules provided** — may need custom rules for joni/jcodings
+- **No injection grammars** - parsed but not evaluated
+- **Joni regex constraints** - backreferences in lookbehind assertions fail gracefully
+- **JVM/Android only** - no iOS or KMP support
+- **No incremental tokenization** - full file re-tokenization on changes
+- **Not on Maven Central** - must use JitPack, git submodule, or local fork
+- **No ProGuard rules provided** - may need custom rules for joni/jcodings
 
 ## Maturity Assessment
 
@@ -119,7 +119,7 @@ The Shiki Token Service can serve as a **reference oracle**:
 
 ## Recommendation
 
-1. **Use the token service for v1** — zero APK cost, proven (Shiki), already deployed
+1. **Use the token service for v1** - zero APK cost, proven (Shiki), already deployed
 2. **Evaluate kotlin-textmate** by comparing its output against the token service for your target languages
 3. **Adopt kotlin-textmate for v2** if offline support is needed, after validation confirms acceptable accuracy
-4. **Hybrid approach** — token service as primary, kotlin-textmate as offline fallback
+4. **Hybrid approach** - token service as primary, kotlin-textmate as offline fallback
