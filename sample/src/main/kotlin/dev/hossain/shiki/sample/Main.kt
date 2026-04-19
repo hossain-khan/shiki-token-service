@@ -9,10 +9,10 @@ import dev.hossain.shiki.model.Theme
 import kotlinx.coroutines.runBlocking
 
 /**
- * Set SHIKI_BASE_URL environment variable to point at your deployed instance.
- * Defaults to http://localhost:3000 for local development (run `npm start` in repo root).
+ * Set SHIKI_BASE_URL environment variable to override the default server.
+ * Defaults to the live deployed instance at https://syntax-highlight.gohk.xyz
  */
-private val BASE_URL = System.getenv("SHIKI_BASE_URL") ?: "http://localhost:3000"
+private val BASE_URL = System.getenv("SHIKI_BASE_URL") ?: "https://syntax-highlight.gohk.xyz"
 
 fun main() = runBlocking {
     println("╔══════════════════════════════════════╗")

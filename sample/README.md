@@ -26,7 +26,10 @@ If the server is unreachable the app prints a clear error and exits cleanly afte
 
 ### 1. Start the Shiki Token Service
 
-From the repository root:
+The sample defaults to the live deployed instance at **https://syntax-highlight.gohk.xyz** —
+no local setup needed.
+
+To run against a local instance instead:
 
 ```bash
 npm install      # first time only
@@ -36,11 +39,11 @@ npm start        # starts on http://localhost:3000
 ### 2. Run the sample
 
 ```bash
-# From the repository root — uses localhost:3000 by default
+# From the repository root — uses live server by default
 ./gradlew :sample:run
 
-# Point at a deployed instance
-SHIKI_BASE_URL=https://your-deployed-url.example.com ./gradlew :sample:run
+# Override with a local or different instance
+SHIKI_BASE_URL=http://localhost:3000 ./gradlew :sample:run
 ```
 
 ### Expected output
@@ -49,7 +52,7 @@ SHIKI_BASE_URL=https://your-deployed-url.example.com ./gradlew :sample:run
 ╔══════════════════════════════════════╗
 ║   Shiki Token Service — SDK Sample   ║
 ╚══════════════════════════════════════╝
-Server: http://localhost:3000
+Server: https://syntax-highlight.gohk.xyz
 
 ▶ Health Check
   status=ok  version=1.0.0
