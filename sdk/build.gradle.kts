@@ -2,9 +2,9 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("multiplatform") version "2.1.0"
-    id("com.android.library") version "8.7.3"
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("multiplatform")
+    id("com.android.library")
+    kotlin("plugin.serialization")
     `maven-publish`
 }
 
