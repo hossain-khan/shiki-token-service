@@ -263,13 +263,20 @@ dependencyResolutionManagement {
     }
 }
 
-// build.gradle.kts
+// build.gradle.kts — pick the artifact for your target:
 dependencies {
-    implementation("com.github.hossain-khan:shiki-token-service:sdk:<tag>")
+    // Android projects
+    implementation("com.github.hossain-khan.shiki-token-service:sdk-android:sdk-1.0.3")
+
+    // JVM projects (non-Android)
+    implementation("com.github.hossain-khan.shiki-token-service:sdk-jvm:sdk-1.0.3")
+
+    // KMP projects (includes metadata for all targets)
+    implementation("com.github.hossain-khan.shiki-token-service:sdk:sdk-1.0.3")
 }
 ```
 
-> Replace `<tag>` with a release tag, e.g. `sdk-1.0.0`. See [JitPack multi-module docs](https://jitpack.io/docs/BUILDING/#multi-module-projects) for details.
+> Latest release: `sdk-1.0.3`. For JitPack multi-module projects the group id uses dots (`com.github.User.Repo`) and the artifact is the module name (`sdk-android`, `sdk-jvm`, or `sdk`).
 
 ### Usage
 
