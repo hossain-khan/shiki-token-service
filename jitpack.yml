@@ -1,6 +1,6 @@
 jdk:
   - openjdk17
-before_install:
+install:
   - chmod +x gradlew
 build:
   - ./gradlew :sdk:publishToMavenLocal
