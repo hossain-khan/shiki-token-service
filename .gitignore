@@ -2,3 +2,10 @@ node_modules/
 dist/
 .wrangler/
 .DS_Store
+
+# Gradle / SDK
+.gradle/
+sdk/build/
+build/
+local.properties
+
