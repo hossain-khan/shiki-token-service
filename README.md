@@ -2,6 +2,8 @@
 
 A portable syntax highlighting microservice that tokenizes source code using [Shiki](https://shiki.style/) and returns colored tokens as JSON. Built with [Hono](https://hono.dev/) for deployment on Cloudflare Workers, Heroku (Node.js), or any JS runtime. Designed for rendering syntax-highlighted code in native mobile apps (Android/iOS) without client-side parsing.
 
+> 💬 See https://hossain.dev/posts/syntax-highlighting-on-android-bringing-shiki-engine-to-compose/
+
 ## Quick Start
 
 ```bash
