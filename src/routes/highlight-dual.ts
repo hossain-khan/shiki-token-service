@@ -31,8 +31,14 @@ app.post("/highlight/dual", async (c) => {
     const t0 = performance.now();
     // Both calls produce identical token boundaries (same lines/tokens) since
     // tokenization is grammar-based; only the color values differ per theme.
-    const darkTokens = highlighter.codeToTokensBase(code, { lang: language as any, theme: darkTheme as any });
-    const lightTokens = highlighter.codeToTokensBase(code, { lang: language as any, theme: lightTheme as any });
+    const darkTokens = highlighter.codeToTokensBase(code, {
+      lang: language as string,
+      theme: darkTheme as string,
+    });
+    const lightTokens = highlighter.codeToTokensBase(code, {
+      lang: language as string,
+      theme: lightTheme as string,
+    });
     c.set("tokenizerMs", performance.now() - t0);
 
     const tokens = darkTokens.map((line, i) =>
@@ -43,7 +49,13 @@ app.post("/highlight/dual", async (c) => {
       }))
     );
 
-    return c.json(withDebug(c, { language, darkTheme, lightTheme, tokens }, debug, { language, darkTheme, lightTheme }));
+    return c.json(
+      withDebug(c, { language, darkTheme, lightTheme, tokens }, debug, {
+        language,
+        darkTheme,
+        lightTheme,
+      })
+    );
   } catch (e) {
     console.error("Highlighting failed:", e);
     return internalError(c, "Highlighting failed");

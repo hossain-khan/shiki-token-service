@@ -26,7 +26,10 @@ app.post("/highlight", async (c) => {
   try {
     const highlighter = await getHighlighter();
     const t0 = performance.now();
-    const result = highlighter.codeToTokensBase(code, { lang: language as any, theme: theme as any });
+    const result = highlighter.codeToTokensBase(code, {
+      lang: language as string,
+      theme: theme as string,
+    });
     c.set("tokenizerMs", performance.now() - t0);
     const tokens = result.map((line) =>
       line.map((token) => ({ text: token.content, color: token.color || "" }))

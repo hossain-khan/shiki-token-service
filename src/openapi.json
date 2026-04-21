@@ -47,12 +47,50 @@
                     "languages": {
                       "type": "array",
                       "items": { "type": "string" },
-                      "example": ["kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript"]
+                      "example": [
+                        "kotlin",
+                        "java",
+                        "python",
+                        "javascript",
+                        "typescript",
+                        "swift",
+                        "go",
+                        "rust",
+                        "json",
+                        "yaml",
+                        "bash",
+                        "sql",
+                        "html",
+                        "css",
+                        "c",
+                        "cpp",
+                        "ruby",
+                        "php",
+                        "markdown",
+                        "xml",
+                        "toml",
+                        "dockerfile",
+                        "graphql",
+                        "csharp",
+                        "scala",
+                        "r",
+                        "dart",
+                        "powershell",
+                        "lua",
+                        "perl",
+                        "shellscript"
+                      ]
                     },
                     "themes": {
                       "type": "array",
                       "items": { "type": "string" },
-                      "example": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"]
+                      "example": [
+                        "github-dark",
+                        "github-light",
+                        "one-dark-pro",
+                        "dracula",
+                        "min-light"
+                      ]
                     }
                   }
                 }
@@ -187,12 +225,57 @@
         "type": "object",
         "required": ["code"],
         "properties": {
-          "code": { "type": "string", "maxLength": 100000, "description": "Source code to highlight" },
+          "code": {
+            "type": "string",
+            "maxLength": 100000,
+            "description": "Source code to highlight"
+          },
           "language": {
             "type": "string",
             "default": "text",
             "description": "Language identifier",
-            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript"]
+            "enum": [
+              "text",
+              "kotlin",
+              "java",
+              "python",
+              "javascript",
+              "typescript",
+              "swift",
+              "go",
+              "rust",
+              "json",
+              "yaml",
+              "bash",
+              "sql",
+              "html",
+              "css",
+              "c",
+              "cpp",
+              "ruby",
+              "php",
+              "markdown",
+              "xml",
+              "toml",
+              "dockerfile",
+              "graphql",
+              "csharp",
+              "scala",
+              "r",
+              "dart",
+              "powershell",
+              "lua",
+              "perl",
+              "shellscript",
+              "csharp",
+              "scala",
+              "r",
+              "dart",
+              "powershell",
+              "lua",
+              "perl",
+              "shellscript"
+            ]
           },
           "theme": {
             "type": "string",
@@ -200,19 +283,68 @@
             "description": "Color theme",
             "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"]
           },
-          "debug": { "type": "boolean", "default": false, "description": "When true, includes a _debug object in the response with processing metrics" }
+          "debug": {
+            "type": "boolean",
+            "default": false,
+            "description": "When true, includes a _debug object in the response with processing metrics"
+          }
         }
       },
       "HighlightDualRequest": {
         "type": "object",
         "required": ["code"],
         "properties": {
-          "code": { "type": "string", "maxLength": 100000, "description": "Source code to highlight" },
+          "code": {
+            "type": "string",
+            "maxLength": 100000,
+            "description": "Source code to highlight"
+          },
           "language": {
             "type": "string",
             "default": "text",
             "description": "Language identifier",
-            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript"]
+            "enum": [
+              "text",
+              "kotlin",
+              "java",
+              "python",
+              "javascript",
+              "typescript",
+              "swift",
+              "go",
+              "rust",
+              "json",
+              "yaml",
+              "bash",
+              "sql",
+              "html",
+              "css",
+              "c",
+              "cpp",
+              "ruby",
+              "php",
+              "markdown",
+              "xml",
+              "toml",
+              "dockerfile",
+              "graphql",
+              "csharp",
+              "scala",
+              "r",
+              "dart",
+              "powershell",
+              "lua",
+              "perl",
+              "shellscript",
+              "csharp",
+              "scala",
+              "r",
+              "dart",
+              "powershell",
+              "lua",
+              "perl",
+              "shellscript"
+            ]
           },
           "darkTheme": {
             "type": "string",
@@ -226,21 +358,74 @@
             "description": "Light color theme",
             "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"]
           },
-          "debug": { "type": "boolean", "default": false, "description": "When true, includes a _debug object in the response with processing metrics" }
+          "debug": {
+            "type": "boolean",
+            "default": false,
+            "description": "When true, includes a _debug object in the response with processing metrics"
+          }
         }
       },
       "HighlightSemanticRequest": {
         "type": "object",
         "required": ["code"],
         "properties": {
-          "code": { "type": "string", "maxLength": 100000, "description": "Source code to highlight" },
+          "code": {
+            "type": "string",
+            "maxLength": 100000,
+            "description": "Source code to highlight"
+          },
           "language": {
             "type": "string",
             "default": "text",
             "description": "Language identifier",
-            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript"]
+            "enum": [
+              "text",
+              "kotlin",
+              "java",
+              "python",
+              "javascript",
+              "typescript",
+              "swift",
+              "go",
+              "rust",
+              "json",
+              "yaml",
+              "bash",
+              "sql",
+              "html",
+              "css",
+              "c",
+              "cpp",
+              "ruby",
+              "php",
+              "markdown",
+              "xml",
+              "toml",
+              "dockerfile",
+              "graphql",
+              "csharp",
+              "scala",
+              "r",
+              "dart",
+              "powershell",
+              "lua",
+              "perl",
+              "shellscript",
+              "csharp",
+              "scala",
+              "r",
+              "dart",
+              "powershell",
+              "lua",
+              "perl",
+              "shellscript"
+            ]
           },
-          "debug": { "type": "boolean", "default": false, "description": "When true, includes a _debug object in the response with processing metrics" }
+          "debug": {
+            "type": "boolean",
+            "default": false,
+            "description": "When true, includes a _debug object in the response with processing metrics"
+          }
         }
       },
       "HighlightResponse": {
@@ -273,7 +458,10 @@
         "properties": {
           "language": { "type": "string", "description": "Language used for tokenization" },
           "darkTheme": { "type": "string", "description": "Dark theme used for color resolution" },
-          "lightTheme": { "type": "string", "description": "Light theme used for color resolution" },
+          "lightTheme": {
+            "type": "string",
+            "description": "Light theme used for color resolution"
+          },
           "tokens": {
             "type": "array",
             "description": "Array of lines, each containing an array of tokens with both dark and light colors",
@@ -316,7 +504,22 @@
                   "type": {
                     "type": "string",
                     "description": "Semantic token type",
-                    "enum": ["keyword", "type", "modifier", "function", "tag", "attribute", "parameter", "variable", "number", "constant", "string", "comment", "punctuation", "plain"]
+                    "enum": [
+                      "keyword",
+                      "type",
+                      "modifier",
+                      "function",
+                      "tag",
+                      "attribute",
+                      "parameter",
+                      "variable",
+                      "number",
+                      "constant",
+                      "string",
+                      "comment",
+                      "punctuation",
+                      "plain"
+                    ]
                   }
                 }
               }
@@ -330,13 +533,31 @@
         "description": "Processing metrics, included when debug is set to true in the request body",
         "required": ["totalMs", "requestBodyBytes"],
         "properties": {
-          "totalMs": { "type": "number", "description": "Total request processing time in milliseconds", "example": 15.2 },
-          "tokenizerMs": { "type": "number", "description": "Time spent in the Shiki tokenizer in milliseconds", "example": 12.6 },
-          "requestBodyBytes": { "type": "integer", "description": "Size of the request body in bytes", "example": 342 },
+          "totalMs": {
+            "type": "number",
+            "description": "Total request processing time in milliseconds",
+            "example": 15.2
+          },
+          "tokenizerMs": {
+            "type": "number",
+            "description": "Time spent in the Shiki tokenizer in milliseconds",
+            "example": 12.6
+          },
+          "requestBodyBytes": {
+            "type": "integer",
+            "description": "Size of the request body in bytes",
+            "example": 342
+          },
           "language": { "type": "string", "description": "Language echoed from request" },
           "theme": { "type": "string", "description": "Theme echoed from request (single theme)" },
-          "darkTheme": { "type": "string", "description": "Dark theme echoed from request (dual theme)" },
-          "lightTheme": { "type": "string", "description": "Light theme echoed from request (dual theme)" }
+          "darkTheme": {
+            "type": "string",
+            "description": "Dark theme echoed from request (dual theme)"
+          },
+          "lightTheme": {
+            "type": "string",
+            "description": "Light theme echoed from request (dual theme)"
+          }
         }
       },
       "ErrorResponse": {
@@ -354,7 +575,10 @@
         "content": {
           "application/json": {
             "schema": { "$ref": "#/components/schemas/ErrorResponse" },
-            "example": { "error": "Unsupported language: brainfuck", "details": "Supported languages: kotlin, java, python, javascript, typescript, swift, go, rust, json, yaml, bash, sql, html, css, c, cpp, ruby, php, markdown, xml, toml, dockerfile, graphql, csharp, scala, r, dart, powershell, lua, perl, shellscript" }
+            "example": {
+              "error": "Unsupported language: brainfuck",
+              "details": "Supported languages: kotlin, java, python, javascript, typescript, swift, go, rust, json, yaml, bash, sql, html, css, c, cpp, ruby, php, markdown, xml, toml, dockerfile, graphql, csharp, scala, r, dart, powershell, lua, perl, shellscript"
+            }
           }
         }
       },

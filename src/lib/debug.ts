@@ -1,6 +1,11 @@
 import type { Context } from "hono";
 
-export function withDebug(c: Context<Env>, body: Record<string, unknown>, debug: boolean, extra?: Record<string, unknown>) {
+export function withDebug(
+  c: Context<Env>,
+  body: Record<string, unknown>,
+  debug: boolean,
+  extra?: Record<string, unknown>
+) {
   if (!debug) return body;
 
   const totalMs = performance.now() - c.get("requestStart");

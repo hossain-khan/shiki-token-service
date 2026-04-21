@@ -50,24 +50,76 @@ import dracula from "@shikijs/themes/dracula";
 import minLight from "@shikijs/themes/min-light";
 
 const SUPPORTED_LANGS = [
-  kotlin, java, python, javascript, typescript, swift, go, rust,
-  json, yaml, bash, sql, html, css, c, cpp, ruby, php,
-  markdown, xml, toml, dockerfile, graphql,
-  csharp, scala, r, dart, powershell, lua, perl, shellscript,
+  kotlin,
+  java,
+  python,
+  javascript,
+  typescript,
+  swift,
+  go,
+  rust,
+  json,
+  yaml,
+  bash,
+  sql,
+  html,
+  css,
+  c,
+  cpp,
+  ruby,
+  php,
+  markdown,
+  xml,
+  toml,
+  dockerfile,
+  graphql,
+  csharp,
+  scala,
+  r,
+  dart,
+  powershell,
+  lua,
+  perl,
+  shellscript,
 ] as const;
 
 const SUPPORTED_THEMES = [githubDark, githubLight, oneDarkPro, dracula, minLight] as const;
 
 const LANGUAGE_NAMES = [
-  "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust",
-  "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php",
-  "markdown", "xml", "toml", "dockerfile", "graphql",
-  "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript",
+  "kotlin",
+  "java",
+  "python",
+  "javascript",
+  "typescript",
+  "swift",
+  "go",
+  "rust",
+  "json",
+  "yaml",
+  "bash",
+  "sql",
+  "html",
+  "css",
+  "c",
+  "cpp",
+  "ruby",
+  "php",
+  "markdown",
+  "xml",
+  "toml",
+  "dockerfile",
+  "graphql",
+  "csharp",
+  "scala",
+  "r",
+  "dart",
+  "powershell",
+  "lua",
+  "perl",
+  "shellscript",
 ];
 
-const THEME_NAMES = [
-  "github-dark", "github-light", "one-dark-pro", "dracula", "min-light",
-];
+const THEME_NAMES = ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"];
 
 // Singleton: reusing prevents ~500ms+ re-initialization per request.
 // Reset to null on failure so the next request retries.
@@ -81,14 +133,16 @@ export function getHighlighter() {
       langs: [...SUPPORTED_LANGS],
       // JS engine instead of WASM — required for Cloudflare Workers which blocks WebAssembly.instantiate()
       engine: createJavaScriptRawEngine(),
-    }).then((h) => {
-      console.log("Shiki highlighter initialized successfully");
-      return h;
-    }).catch((e) => {
-      console.error("Shiki highlighter initialization failed:", e);
-      highlighterPromise = null;
-      throw e;
-    });
+    })
+      .then((h) => {
+        console.log("Shiki highlighter initialized successfully");
+        return h;
+      })
+      .catch((e) => {
+        console.error("Shiki highlighter initialization failed:", e);
+        highlighterPromise = null;
+        throw e;
+      });
   }
   return highlighterPromise;
 }

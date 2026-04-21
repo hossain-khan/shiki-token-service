@@ -21,9 +21,10 @@ app.use("*", async (c, next) => {
   await next();
   const totalMs = performance.now() - (c.get("requestStart") as number);
   const tokenizerMs = (c.get("tokenizerMs") as number | undefined) ?? undefined;
-  const serverTiming = tokenizerMs !== undefined
-    ? `total;dur=${totalMs.toFixed(1)}, tokenizer;dur=${tokenizerMs.toFixed(1)}`
-    : `total;dur=${totalMs.toFixed(1)}`;
+  const serverTiming =
+    tokenizerMs !== undefined
+      ? `total;dur=${totalMs.toFixed(1)}, tokenizer;dur=${tokenizerMs.toFixed(1)}`
+      : `total;dur=${totalMs.toFixed(1)}`;
   c.header("Server-Timing", serverTiming);
 });
 
