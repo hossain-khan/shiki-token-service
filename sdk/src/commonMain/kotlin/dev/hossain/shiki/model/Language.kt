@@ -26,10 +26,19 @@ object Language {
     const val TOML = "toml"
     const val DOCKERFILE = "dockerfile"
     const val GRAPHQL = "graphql"
+    const val CSHARP = "csharp"
+    const val SCALA = "scala"
+    const val R = "r"
+    const val DART = "dart"
+    const val POWERSHELL = "powershell"
+    const val LUA = "lua"
+    const val PERL = "perl"
+    const val SHELLSCRIPT = "shellscript"
 
     val ALL = listOf(
         TEXT, KOTLIN, JAVA, PYTHON, JAVASCRIPT, TYPESCRIPT, SWIFT, GO, RUST,
         JSON, YAML, BASH, SQL, HTML, CSS, C, CPP, RUBY, PHP, MARKDOWN,
-        XML, TOML, DOCKERFILE, GRAPHQL
+        XML, TOML, DOCKERFILE, GRAPHQL,
+        CSHARP, SCALA, R, DART, POWERSHELL, LUA, PERL, SHELLSCRIPT,
     )
 }

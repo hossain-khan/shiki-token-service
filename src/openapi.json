@@ -47,7 +47,7 @@
                     "languages": {
                       "type": "array",
                       "items": { "type": "string" },
-                      "example": ["kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql"]
+                      "example": ["kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript"]
                     },
                     "themes": {
                       "type": "array",
@@ -192,7 +192,7 @@
             "type": "string",
             "default": "text",
             "description": "Language identifier",
-            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql"]
+            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript"]
           },
           "theme": {
             "type": "string",
@@ -212,7 +212,7 @@
             "type": "string",
             "default": "text",
             "description": "Language identifier",
-            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql"]
+            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript"]
           },
           "darkTheme": {
             "type": "string",
@@ -238,7 +238,7 @@
             "type": "string",
             "default": "text",
             "description": "Language identifier",
-            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql"]
+            "enum": ["text", "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust", "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php", "markdown", "xml", "toml", "dockerfile", "graphql", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript", "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript"]
           },
           "debug": { "type": "boolean", "default": false, "description": "When true, includes a _debug object in the response with processing metrics" }
         }
@@ -354,7 +354,7 @@
         "content": {
           "application/json": {
             "schema": { "$ref": "#/components/schemas/ErrorResponse" },
-            "example": { "error": "Unsupported language: brainfuck", "details": "Supported languages: kotlin, java, python, javascript, typescript, swift, go, rust, json, yaml, bash, sql, html, css, c, cpp, ruby, php, markdown, xml, toml, dockerfile, graphql" }
+            "example": { "error": "Unsupported language: brainfuck", "details": "Supported languages: kotlin, java, python, javascript, typescript, swift, go, rust, json, yaml, bash, sql, html, css, c, cpp, ruby, php, markdown, xml, toml, dockerfile, graphql, csharp, scala, r, dart, powershell, lua, perl, shellscript" }
           }
         }
       },

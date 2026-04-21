@@ -34,6 +34,14 @@ import xml from "@shikijs/langs-precompiled/xml";
 import toml from "@shikijs/langs-precompiled/toml";
 import dockerfile from "@shikijs/langs-precompiled/dockerfile";
 import graphql from "@shikijs/langs-precompiled/graphql";
+import csharp from "@shikijs/langs-precompiled/csharp";
+import scala from "@shikijs/langs-precompiled/scala";
+import r from "@shikijs/langs-precompiled/r";
+import dart from "@shikijs/langs-precompiled/dart";
+import powershell from "@shikijs/langs-precompiled/powershell";
+import lua from "@shikijs/langs-precompiled/lua";
+import perl from "@shikijs/langs-precompiled/perl";
+import shellscript from "@shikijs/langs-precompiled/shellscript";
 
 import githubDark from "@shikijs/themes/github-dark";
 import githubLight from "@shikijs/themes/github-light";
@@ -45,6 +53,7 @@ const SUPPORTED_LANGS = [
   kotlin, java, python, javascript, typescript, swift, go, rust,
   json, yaml, bash, sql, html, css, c, cpp, ruby, php,
   markdown, xml, toml, dockerfile, graphql,
+  csharp, scala, r, dart, powershell, lua, perl, shellscript,
 ] as const;
 
 const SUPPORTED_THEMES = [githubDark, githubLight, oneDarkPro, dracula, minLight] as const;
@@ -53,6 +62,7 @@ const LANGUAGE_NAMES = [
   "kotlin", "java", "python", "javascript", "typescript", "swift", "go", "rust",
   "json", "yaml", "bash", "sql", "html", "css", "c", "cpp", "ruby", "php",
   "markdown", "xml", "toml", "dockerfile", "graphql",
+  "csharp", "scala", "r", "dart", "powershell", "lua", "perl", "shellscript",
 ];
 
 const THEME_NAMES = [

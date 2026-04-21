@@ -116,7 +116,10 @@ Use `Language` and `Theme` objects to avoid typos:
 Language.KOTLIN      // "kotlin"
 Language.JAVASCRIPT  // "javascript"
 Language.PYTHON      // "python"
-// … see Language.ALL for the full list
+Language.CSHARP      // "csharp"
+Language.SCALA       // "scala"
+Language.DART        // "dart"
+// … see Language.ALL for the full list (31 languages)
 
 Theme.GITHUB_DARK    // "github-dark"
 Theme.GITHUB_LIGHT   // "github-light"

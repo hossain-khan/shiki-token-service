@@ -203,7 +203,7 @@ All errors return JSON with an `error` field and optional `details`:
 
 ## Supported Languages
 
-`kotlin`, `java`, `python`, `javascript`, `typescript`, `swift`, `go`, `rust`, `json`, `yaml`, `bash`, `sql`, `html`, `css`, `c`, `cpp`, `ruby`, `php`, `markdown`, `xml`, `toml`, `dockerfile`, `graphql`
+`kotlin`, `java`, `python`, `javascript`, `typescript`, `swift`, `go`, `rust`, `json`, `yaml`, `bash`, `sql`, `html`, `css`, `c`, `cpp`, `ruby`, `php`, `markdown`, `xml`, `toml`, `dockerfile`, `graphql`, `csharp`, `scala`, `r`, `dart`, `powershell`, `lua`, `perl`, `shellscript`
 
 ## Supported Themes
 
