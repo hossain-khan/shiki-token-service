@@ -6,6 +6,21 @@ import { withDebug } from "../lib/debug.js";
 
 const app = new Hono<Env>();
 
+/**
+ * POST /highlight
+ *
+ * Tokenizes source code with a single color theme and returns an array of
+ * lines, each containing an array of `{ text, color }` tokens.
+ *
+ * Request body (`HighlightRequestSchema`):
+ * - `code`     {string}  Source code to highlight (max 100 KB).
+ * - `language` {string}  Language identifier (default: `"text"`).
+ * - `theme`    {string}  Color theme name (default: `"github-dark"`).
+ * - `debug`    {boolean} Include `_debug` timing block in response (default: `false`).
+ *
+ * Response: `{ language, theme, tokens: Array<Array<{ text, color }>> }`
+ * Sets `Server-Timing: total;dur=…, tokenizer;dur=…` on the response.
+ */
 app.post("/highlight", async (c) => {
   const parsed = HighlightRequestSchema.safeParse(await c.req.json());
   if (!parsed.success) {

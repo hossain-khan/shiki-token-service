@@ -6,6 +6,26 @@ import { withDebug } from "../lib/debug.js";
 
 const app = new Hono<Env>();
 
+/**
+ * POST /highlight/dual
+ *
+ * Tokenizes source code with two themes simultaneously (dark + light) and
+ * returns tokens that carry both color values. This allows clients to switch
+ * between color modes at render time without making a second API call.
+ *
+ * Both theme passes produce identical token boundaries because tokenization is
+ * grammar-driven; only the resolved hex color per token differs per theme.
+ *
+ * Request body (`HighlightDualRequestSchema`):
+ * - `code`       {string}  Source code to highlight (max 100 KB).
+ * - `language`   {string}  Language identifier (default: `"text"`).
+ * - `darkTheme`  {string}  Dark color theme name (default: `"github-dark"`).
+ * - `lightTheme` {string}  Light color theme name (default: `"github-light"`).
+ * - `debug`      {boolean} Include `_debug` timing block in response (default: `false`).
+ *
+ * Response: `{ language, darkTheme, lightTheme, tokens: Array<Array<{ text, darkColor, lightColor }>> }`
+ * Sets `Server-Timing: total;dur=…, tokenizer;dur=…` on the response.
+ */
 app.post("/highlight/dual", async (c) => {
   const parsed = HighlightDualRequestSchema.safeParse(await c.req.json());
   if (!parsed.success) {

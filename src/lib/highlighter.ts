@@ -143,6 +143,15 @@ const THEME_NAMES = [
 // Reset to null on failure so the next request retries.
 let highlighterPromise: ReturnType<typeof createHighlighterCore> | null = null;
 
+/**
+ * Returns the shared Shiki highlighter instance, initializing it on first call.
+ *
+ * The highlighter is created once and reused across requests (cold-start cost
+ * is ~500 ms+). If initialization fails the promise is reset to `null` so the
+ * next request triggers a fresh attempt rather than replaying the rejection.
+ *
+ * Must be awaited before calling `codeToTokensBase` or `codeToTokens`.
+ */
 export function getHighlighter() {
   if (!highlighterPromise) {
     console.log("Initializing Shiki highlighter (pre-compiled JS engine)...");
@@ -165,10 +174,12 @@ export function getHighlighter() {
   return highlighterPromise;
 }
 
+/** Returns a copy of the list of supported language identifier strings. */
 export function getSupportedLanguages(): string[] {
   return [...LANGUAGE_NAMES];
 }
 
+/** Returns a copy of the list of supported theme name strings. */
 export function getSupportedThemes(): string[] {
   return [...THEME_NAMES];
 }

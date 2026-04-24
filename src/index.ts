@@ -10,8 +10,19 @@ import demo from "./routes/demo.js";
 
 const app = new Hono<Env>();
 
+// Allow cross-origin requests so the API can be consumed by browser-based clients.
 app.use("*", cors());
 
+/**
+ * Global timing middleware — runs on every request.
+ *
+ * - Rejects payloads larger than 200 KB before the body is read by any route.
+ * - Records `requestStart` and `requestBodyBytes` into Hono context so route
+ *   handlers and `withDebug()` can reference them without re-reading the request.
+ * - Emits a `Server-Timing` header on every response:
+ *     - `total`     — full request processing time in ms.
+ *     - `tokenizer` — Shiki tokenizer time in ms (highlight routes only).
+ */
 app.use("*", async (c, next) => {
   const contentLength = parseInt(c.req.header("content-length") || "0", 10);
   if (contentLength > 200 * 1024) {

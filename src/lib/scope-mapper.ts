@@ -22,8 +22,18 @@ const SCOPE_RULES: [string, string][] = [
   ["support.type", "type"],
 ];
 
-// Iterates scopes from most-specific to least-specific (reversed) because
-// Shiki provides scopes as a hierarchy where the last item is most specific.
+/**
+ * Maps a TextMate scope stack to a single semantic token type string.
+ *
+ * Shiki provides scopes as a hierarchy (outermost → innermost). The array is
+ * iterated in reverse so the most-specific (innermost) scope is evaluated first.
+ * Each scope is tested against `SCOPE_RULES` in order; the first prefix match
+ * wins. Falls back to `"plain"` if no rule matches.
+ *
+ * @param scopes - Array of TextMate scope names for a single token, ordered
+ *                 from least-specific to most-specific.
+ * @returns A semantic token type string (e.g. `"keyword"`, `"string"`, `"plain"`).
+ */
 export function mapScopeToTokenType(scopes: string[]): string {
   for (let i = scopes.length - 1; i >= 0; i--) {
     for (const [prefix, tokenType] of SCOPE_RULES) {

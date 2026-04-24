@@ -1,5 +1,20 @@
 import type { Context } from "hono";
 
+/**
+ * Conditionally appends a `_debug` object to a JSON response body.
+ *
+ * When `debug` is `false` the original `body` is returned unchanged. When
+ * `true`, the following fields are added under `_debug`:
+ * - `totalMs`          — total request wall-clock time in ms (1 decimal place).
+ * - `tokenizerMs`      — Shiki tokenizer time in ms (present on highlight routes).
+ * - `requestBodyBytes` — incoming `Content-Length` in bytes.
+ * - `...extra`         — any route-specific fields (e.g. echoed `language` / `theme`).
+ *
+ * @param c     - Hono context; reads `requestStart`, `tokenizerMs`, `requestBodyBytes`.
+ * @param body  - Base response object to extend.
+ * @param debug - Whether to include the `_debug` block.
+ * @param extra - Additional key/value pairs to merge into `_debug`.
+ */
 export function withDebug(
   c: Context<Env>,
   body: Record<string, unknown>,
