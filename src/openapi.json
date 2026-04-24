@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Shiki Token Service",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "description": "A syntax highlighting microservice that tokenizes source code using Shiki and returns colored tokens as JSON. Built for rendering syntax-highlighted code in native mobile apps without client-side parsing."
   },
   "paths": {
@@ -21,7 +21,7 @@
                   "required": ["status", "version"],
                   "properties": {
                     "status": { "type": "string", "example": "ok" },
-                    "version": { "type": "string", "example": "1.0.0" }
+                    "version": { "type": "string", "example": "1.2.0" }
                   }
                 }
               }
