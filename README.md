@@ -210,7 +210,7 @@ All errors return JSON with an `error` field and optional `details`:
 
 ## Supported Themes
 
-`github-dark`, `github-light`, `one-dark-pro`, `dracula`, `min-light`
+`github-dark`, `github-light`, `one-dark-pro`, `dracula`, `min-light`, `dark-plus`, `light-plus`
 
 ## Deployment
 
@@ -250,7 +250,7 @@ This service uses Shiki's [pre-compiled JavaScript regex engine](https://shiki.s
 - **Tiny footprint** - ~3 KB engine vs ~456 KB WASM binary
 - **Full language support** - all built-in Shiki languages are supported as of v3.9.1
 
-The tradeoff is slightly less regex accuracy for edge-case grammars (e.g., C++ can exhibit backtracking), but for the 23 mainstream languages supported by this service, results are identical to the WASM engine.
+The tradeoff is slightly less regex accuracy for edge-case grammars (e.g., C++ can exhibit backtracking), but for the 31 mainstream languages supported by this service, results are identical to the WASM engine.
 
 ## Kotlin / Android SDK
 
