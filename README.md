@@ -18,6 +18,12 @@ For local development with Cloudflare Workers:
 npm run dev
 ```
 
+To run the test suite:
+
+```bash
+npm test
+```
+
 ## API Endpoints
 
 | Method | Path | Description |
