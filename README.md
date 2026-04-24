@@ -1,3 +1,5 @@
+[![](https://img.shields.io/badge/OpenAPI-3.1.0-green)](https://syntax-highlight.gohk.xyz/openapi.json) [![codecov](https://codecov.io/github/hossain-khan/shiki-token-service/graph/badge.svg?token=JZN1FOKJLJ)](https://codecov.io/github/hossain-khan/shiki-token-service)
+
 # Shiki Token Service
 
 A portable syntax highlighting microservice that tokenizes source code using [Shiki](https://shiki.style/) and returns colored tokens as JSON. Built with [Hono](https://hono.dev/) for deployment on Cloudflare Workers, Heroku (Node.js), or any JS runtime. Designed for rendering syntax-highlighted code in native mobile apps (Android/iOS) without client-side parsing.
