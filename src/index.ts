@@ -6,6 +6,7 @@ import highlight from "./routes/highlight.js";
 import highlightDual from "./routes/highlight-dual.js";
 import highlightSemantic from "./routes/highlight-semantic.js";
 import docs from "./routes/docs.js";
+import demo from "./routes/demo.js";
 
 const app = new Hono<Env>();
 
@@ -34,6 +35,7 @@ app.route("/", highlight);
 app.route("/", highlightDual);
 app.route("/", highlightSemantic);
 app.route("/", docs);
+app.route("/", demo);
 
 app.get("/", (c) => c.redirect("/docs"));
 
