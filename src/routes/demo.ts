@@ -45,6 +45,8 @@ app.get("/demo", (c) => {
    * Serves a self-contained interactive HTML demo page for the syntax
    * highlighting API. No external assets — all CSS and JavaScript are inlined.
    *
+   * Live URL: https://syntax-highlight.gohk.xyz/demo
+   *
    * Features:
    * - **Single Theme** mode — calls `POST /highlight`; renders tokens with the
    *   chosen theme's hex colors against the matching background color.

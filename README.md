@@ -22,6 +22,7 @@ npm run dev
 
 | Method | Path | Description |
 |--------|------|-------------|
+| `GET` | `/demo` | Interactive demo page — [try it live](https://syntax-highlight.gohk.xyz/demo) |
 | `GET` | `/docs` | Interactive Swagger UI API explorer |
 | `GET` | `/openapi.json` | OpenAPI 3.1 specification |
 | `GET` | `/health` | Health check |
