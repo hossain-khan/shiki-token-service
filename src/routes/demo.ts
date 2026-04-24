@@ -2,6 +2,15 @@ import { Hono } from "hono";
 
 const app = new Hono();
 
+/**
+ * Preset code snippets injected into the demo page as a JSON literal.
+ *
+ * Each key maps to `{ lang, code }` where `lang` is a supported language
+ * identifier and `code` is a representative snippet for that language.
+ * The `replace(/<\//g, "<\\/")` call escapes `</` sequences so the JSON can
+ * be safely embedded inside an HTML `<script>` block without prematurely
+ * closing a `</script>` tag.
+ */
 const SNIPPETS_JSON = JSON.stringify({
   kotlin: {
     lang: "kotlin",
@@ -30,6 +39,35 @@ const SNIPPETS_JSON = JSON.stringify({
 }).replace(/<\//g, "<\\/");
 
 app.get("/demo", (c) => {
+  /**
+   * GET /demo
+   *
+   * Serves a self-contained interactive HTML demo page for the syntax
+   * highlighting API. No external assets — all CSS and JavaScript are inlined.
+   *
+   * Features:
+   * - **Single Theme** mode — calls `POST /highlight`; renders tokens with the
+   *   chosen theme's hex colors against the matching background color.
+   * - **Dual Theme** mode — calls `POST /highlight/dual`; stores both dark and
+   *   light colors on each `<span>` (`data-d` / `data-l`) so the 🌙/☀️ toggle
+   *   swaps color modes without a second API round-trip.
+   * - **Semantic** mode — calls `POST /highlight/semantic`; applies CSS classes
+   *   (`sem-keyword`, `sem-string`, …) for theme-independent token coloring;
+   *   hovering a token shows its type via the `title` attribute; a legend badge
+   *   strip lists all types found in the snippet.
+   * - Language and theme selectors populated dynamically from `GET /languages`.
+   * - Six built-in preset snippets: Kotlin, TypeScript, Python, SQL, JSON, Bash.
+   * - ⌘+Enter / Ctrl+Enter keyboard shortcut to trigger highlighting.
+   * - Footer metrics strip: tokenizer ms, server total ms, round-trip ms, line
+   *   count, token count, request size (KB), and endpoint path.
+   *
+   * The page JavaScript intentionally uses `var`/`function()` syntax (no
+   * template literals or `${}`) to avoid escaping conflicts with the outer
+   * TypeScript template literal that builds the HTML string.
+   * Line separators in `innerHTML` use `\\n` (escaped in TS source) so the
+   * rendered HTML contains the literal two-character sequence `\n` rather than
+   * a real newline, preventing JS string syntax errors in the `<script>` block.
+   */
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
