@@ -5,7 +5,7 @@ const app = new Hono();
 const SNIPPETS_JSON = JSON.stringify({
   kotlin: {
     lang: "kotlin",
-    code: "data class User(val id: Long, val name: String, val age: Int)\n\nclass UserRepo(private val db: Database) {\n\n    suspend fun findById(id: Long): User? =\n        db.query(\"SELECT * FROM users WHERE id = ?\", id)\n            .map { User(it[\"id\"], it[\"name\"], it[\"age\"]) }\n            .firstOrNull()\n\n    suspend fun findAdults(): List<User> =\n        db.query(\"SELECT * FROM users WHERE age >= 18\")\n            .map { User(it[\"id\"], it[\"name\"], it[\"age\"]) }\n}",
+    code: 'data class User(val id: Long, val name: String, val age: Int)\n\nclass UserRepo(private val db: Database) {\n\n    suspend fun findById(id: Long): User? =\n        db.query("SELECT * FROM users WHERE id = ?", id)\n            .map { User(it["id"], it["name"], it["age"]) }\n            .firstOrNull()\n\n    suspend fun findAdults(): List<User> =\n        db.query("SELECT * FROM users WHERE age >= 18")\n            .map { User(it["id"], it["name"], it["age"]) }\n}',
   },
   typescript: {
     lang: "typescript",
@@ -13,7 +13,7 @@ const SNIPPETS_JSON = JSON.stringify({
   },
   python: {
     lang: "python",
-    code: "from dataclasses import dataclass, field\nfrom typing import Optional, List\n\n@dataclass\nclass Config:\n    host: str = \"localhost\"\n    port: int = 8080\n    debug: bool = False\n    allowed_origins: List[str] = field(default_factory=list)\n\ndef create_app(config: Optional[Config] = None) -> None:\n    cfg = config or Config()\n    print(f\"Starting on {cfg.host}:{cfg.port}\")\n    if cfg.debug:\n        print(\"Debug mode enabled\")",
+    code: 'from dataclasses import dataclass, field\nfrom typing import Optional, List\n\n@dataclass\nclass Config:\n    host: str = "localhost"\n    port: int = 8080\n    debug: bool = False\n    allowed_origins: List[str] = field(default_factory=list)\n\ndef create_app(config: Optional[Config] = None) -> None:\n    cfg = config or Config()\n    print(f"Starting on {cfg.host}:{cfg.port}")\n    if cfg.debug:\n        print("Debug mode enabled")',
   },
   sql: {
     lang: "sql",
@@ -21,11 +21,11 @@ const SNIPPETS_JSON = JSON.stringify({
   },
   json: {
     lang: "json",
-    code: "{\n  \"code\": \"const greet = (name) => console.log(name);\",\n  \"language\": \"javascript\",\n  \"darkTheme\": \"github-dark\",\n  \"lightTheme\": \"github-light\",\n  \"debug\": true\n}",
+    code: '{\n  "code": "const greet = (name) => console.log(name);",\n  "language": "javascript",\n  "darkTheme": "github-dark",\n  "lightTheme": "github-light",\n  "debug": true\n}',
   },
   bash: {
     lang: "shellscript",
-    code: "#!/bin/bash\nset -euo pipefail\n\nAPI='https://syntax-highlight.gohk.xyz'\n\ncurl -s \"$API/highlight\" \\\n  -X POST \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"code\":\"print(42)\",\"language\":\"python\",\"theme\":\"github-dark\"}'",
+    code: '#!/bin/bash\nset -euo pipefail\n\nAPI=\'https://syntax-highlight.gohk.xyz\'\n\ncurl -s "$API/highlight" \\\n  -X POST \\\n  -H \'Content-Type: application/json\' \\\n  -d \'{"code":"print(42)","language":"python","theme":"github-dark"}\'',
   },
 }).replace(/<\//g, "<\\/");
 
