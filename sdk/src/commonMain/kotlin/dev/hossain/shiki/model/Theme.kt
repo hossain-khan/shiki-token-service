@@ -7,6 +7,8 @@ object Theme {
     const val ONE_DARK_PRO = "one-dark-pro"
     const val DRACULA = "dracula"
     const val MIN_LIGHT = "min-light"
+    const val DARK_PLUS = "dark-plus"
+    const val LIGHT_PLUS = "light-plus"
 
-    val ALL = listOf(GITHUB_DARK, GITHUB_LIGHT, ONE_DARK_PRO, DRACULA, MIN_LIGHT)
+    val ALL = listOf(GITHUB_DARK, GITHUB_LIGHT, ONE_DARK_PRO, DRACULA, MIN_LIGHT, DARK_PLUS, LIGHT_PLUS)
 }

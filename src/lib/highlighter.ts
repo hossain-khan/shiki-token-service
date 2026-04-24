@@ -48,6 +48,8 @@ import githubLight from "@shikijs/themes/github-light";
 import oneDarkPro from "@shikijs/themes/one-dark-pro";
 import dracula from "@shikijs/themes/dracula";
 import minLight from "@shikijs/themes/min-light";
+import darkPlus from "@shikijs/themes/dark-plus";
+import lightPlus from "@shikijs/themes/light-plus";
 
 const SUPPORTED_LANGS = [
   kotlin,
@@ -83,7 +85,7 @@ const SUPPORTED_LANGS = [
   shellscript,
 ] as const;
 
-const SUPPORTED_THEMES = [githubDark, githubLight, oneDarkPro, dracula, minLight] as const;
+const SUPPORTED_THEMES = [githubDark, githubLight, oneDarkPro, dracula, minLight, darkPlus, lightPlus] as const;
 
 const LANGUAGE_NAMES = [
   "kotlin",
@@ -119,7 +121,7 @@ const LANGUAGE_NAMES = [
   "shellscript",
 ];
 
-const THEME_NAMES = ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"];
+const THEME_NAMES = ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light", "dark-plus", "light-plus"];
 
 // Singleton: reusing prevents ~500ms+ re-initialization per request.
 // Reset to null on failure so the next request retries.

@@ -89,7 +89,9 @@
                         "github-light",
                         "one-dark-pro",
                         "dracula",
-                        "min-light"
+                        "min-light",
+                        "dark-plus",
+                        "light-plus"
                       ]
                     }
                   }
@@ -281,7 +283,7 @@
             "type": "string",
             "default": "github-dark",
             "description": "Color theme",
-            "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"]
+            "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light", "dark-plus", "light-plus"]
           },
           "debug": {
             "type": "boolean",
@@ -350,13 +352,13 @@
             "type": "string",
             "default": "github-dark",
             "description": "Dark color theme",
-            "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"]
+            "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light", "dark-plus", "light-plus"]
           },
           "lightTheme": {
             "type": "string",
             "default": "github-light",
             "description": "Light color theme",
-            "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light"]
+            "enum": ["github-dark", "github-light", "one-dark-pro", "dracula", "min-light", "dark-plus", "light-plus"]
           },
           "debug": {
             "type": "boolean",
