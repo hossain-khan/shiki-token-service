@@ -297,20 +297,20 @@ app.get("/demo", (c) => {
     var tokens=data.tokens; semLegend.innerHTML='';
     if(mode==='single'){
       outputWrap.style.background=THEME_BG[data.theme||themeSel.value]||'#1e1e1e';
-      output.innerHTML=tokens.map(function(line){return line.map(function(t){return '<span style="color:'+(t.color||'inherit')+'">'+esc(t.text)+'</span>';}).join('');}).join('\n');
+      output.innerHTML=tokens.map(function(line){return line.map(function(t){return '<span style="color:'+(t.color||'inherit')+'">'+esc(t.text)+'</span>';}).join('');}).join('\\n');
     } else if(mode==='dual'){
       outputWrap.style.background=dualView==='dark'?(THEME_BG[darkSel.value]||'#1e1e1e'):(THEME_BG[lightSel.value]||'#ffffff');
       output.innerHTML=tokens.map(function(line){return line.map(function(t){
         var col=dualView==='dark'?(t.darkColor||''):(t.lightColor||'');
         return '<span data-d="'+esc(t.darkColor||'')+'" data-l="'+esc(t.lightColor||'')+'" style="color:'+col+'">'+esc(t.text)+'</span>';
-      }).join('');}).join('\n');
+      }).join('');}).join('\\n');
     } else {
       outputWrap.style.background='#1e1e1e';
       var typesFound={};
       output.innerHTML=tokens.map(function(line){return line.map(function(t){
         typesFound[t.type]=true;
         return '<span class="sem-'+t.type+'" title="'+t.type+'">'+esc(t.text)+'</span>';
-      }).join('');}).join('\n');
+      }).join('');}).join('\\n');
       semLegend.style.display='flex';
       Object.keys(typesFound).sort().forEach(function(type){
         var span=document.createElement('span');
