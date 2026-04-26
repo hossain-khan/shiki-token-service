@@ -9,6 +9,13 @@ A portable syntax highlighting microservice that tokenizes source code using [Sh
 
 <img width="3477" height="1997" alt="shiki-service-compare" src="https://github.com/user-attachments/assets/01b99d3d-cf51-465c-8a01-36819dfdbdc6" />
 
+
+<details><summary>Benchmark Snapshot 📊</summary>
+
+<img width="2816" height="5638" alt="Image" src="https://github.com/user-attachments/assets/d273cb00-f9b5-47f8-9e06-efcab2021b40" />
+
+</details>
+
 ## Quick Start
 
 ```bash
