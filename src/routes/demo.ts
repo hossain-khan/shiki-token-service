@@ -14,27 +14,19 @@ const app = new Hono();
 const SNIPPETS_JSON = JSON.stringify({
   kotlin: {
     lang: "kotlin",
-    code: 'data class User(val id: Long, val name: String, val age: Int)\n\nclass UserRepo(private val db: Database) {\n\n    suspend fun findById(id: Long): User? =\n        db.query("SELECT * FROM users WHERE id = ?", id)\n            .map { User(it["id"], it["name"], it["age"]) }\n            .firstOrNull()\n\n    suspend fun findAdults(): List<User> =\n        db.query("SELECT * FROM users WHERE age >= 18")\n            .map { User(it["id"], it["name"], it["age"]) }\n}',
-  },
-  typescript: {
-    lang: "typescript",
-    code: "interface ApiResponse<T> {\n  data: T;\n  status: number;\n  message: string;\n}\n\nasync function fetchData<T>(url: string): Promise<ApiResponse<T>> {\n  const res = await fetch(url);\n  if (!res.ok) throw new Error('HTTP ' + res.status);\n  return res.json() as ApiResponse<T>;\n}\n\n// Usage\nconst result = await fetchData<{ id: number; name: string }>('/api/user');",
+    code: 'package com.example\n\nimport kotlinx.coroutines.*\n\ndata class User(val name: String, val age: Int)\n\nsuspend fun fetchUsers(): List<User> = coroutineScope {\n    val users = listOf(\n        User("Alice", 30),\n        User("Bob", 25),\n        User("Charlie", 35),\n    )\n    val adults = users.filter { it.age >= 30 }\n    adults.forEach { user ->\n        println("${user.name} is ${user.age} years old")\n    }\n    adults\n}\n\nfun main() = runBlocking {\n    val result = fetchUsers()\n    println("Found ${result.size} adults")\n}',
   },
   python: {
     lang: "python",
-    code: 'from dataclasses import dataclass, field\nfrom typing import Optional, List\n\n@dataclass\nclass Config:\n    host: str = "localhost"\n    port: int = 8080\n    debug: bool = False\n    allowed_origins: List[str] = field(default_factory=list)\n\ndef create_app(config: Optional[Config] = None) -> None:\n    cfg = config or Config()\n    print(f"Starting on {cfg.host}:{cfg.port}")\n    if cfg.debug:\n        print("Debug mode enabled")',
-  },
-  sql: {
-    lang: "sql",
-    code: "SELECT\n    u.name,\n    COUNT(o.id)       AS order_count,\n    SUM(o.total)      AS total_spent,\n    MAX(o.created_at) AS last_order\nFROM users u\nLEFT JOIN orders o\n    ON u.id = o.user_id\n   AND o.status = 'completed'\nWHERE u.created_at >= '2024-01-01'\nGROUP BY u.id, u.name\nHAVING total_spent > 1000\nORDER BY total_spent DESC\nLIMIT 20;",
+    code: 'from dataclasses import dataclass\nfrom typing import Optional\nimport asyncio\n\n@dataclass\nclass User:\n    name: str\n    age: int\n    email: Optional[str] = None\n\nasync def fetch_users() -> list[User]:\n    # Simulate async data fetch\n    await asyncio.sleep(0.1)\n    return [\n        User("Alice", 30, "alice@example.com"),\n        User("Bob", 25),\n        User("Charlie", 35, "charlie@example.com"),\n    ]\n\nasync def main():\n    users = await fetch_users()\n    adults = [u for u in users if u.age >= 30]\n    for user in adults:\n        print(f"{user.name} is {user.age} years old")\n\nif __name__ == "__main__":\n    asyncio.run(main())',
   },
   json: {
     lang: "json",
-    code: '{\n  "code": "const greet = (name) => console.log(name);",\n  "language": "javascript",\n  "darkTheme": "github-dark",\n  "lightTheme": "github-light",\n  "debug": true\n}',
+    code: '{\n  "users": [\n    {\n      "id": "usr_01",\n      "name": "Alice",\n      "age": 30,\n      "email": "alice@example.com",\n      "roles": ["admin", "viewer"],\n      "active": true\n    },\n    {\n      "id": "usr_02",\n      "name": "Bob",\n      "age": 25,\n      "email": null,\n      "roles": ["viewer"],\n      "active": false\n    }\n  ],\n  "meta": {\n    "total": 2,\n    "page": 1,\n    "perPage": 20\n  }\n}',
   },
-  bash: {
-    lang: "shellscript",
-    code: '#!/bin/bash\nset -euo pipefail\n\nAPI=\'https://syntax-highlight.gohk.xyz\'\n\ncurl -s "$API/highlight" \\\n  -X POST \\\n  -H \'Content-Type: application/json\' \\\n  -d \'{"code":"print(42)","language":"python","theme":"github-dark"}\'',
+  javascript: {
+    lang: "javascript",
+    code: "const fetchUsers = async (baseUrl) => {\n  const response = await fetch(`${baseUrl}/users`);\n  if (!response.ok) {\n    throw new Error(`HTTP error! status: ${response.status}`);\n  }\n  return response.json();\n};\n\nclass UserService {\n  constructor(baseUrl) {\n    this.baseUrl = baseUrl;\n    this.cache = new Map();\n  }\n\n  async getUser(id) {\n    if (this.cache.has(id)) {\n      return this.cache.get(id);\n    }\n    const users = await fetchUsers(this.baseUrl);\n    const user = users.find(u => u.id === id);\n    this.cache.set(id, user);\n    return user;\n  }\n}\n\nexport default UserService;",
   },
 }).replace(/<\//g, "<\\/");
 
@@ -58,7 +50,7 @@ app.get("/demo", (c) => {
    *   hovering a token shows its type via the `title` attribute; a legend badge
    *   strip lists all types found in the snippet.
    * - Language and theme selectors populated dynamically from `GET /languages`.
-   * - Six built-in preset snippets: Kotlin, TypeScript, Python, SQL, JSON, Bash.
+   * - Four built-in preset snippets: Kotlin, Python, JSON, JavaScript.
    * - ⌘+Enter / Ctrl+Enter keyboard shortcut to trigger highlighting.
    * - Footer metrics strip: tokenizer ms, server total ms, round-trip ms, line
    *   count, token count, request size (KB), and endpoint path.
@@ -225,11 +217,9 @@ app.get("/demo", (c) => {
       <select id="preset-select">
         <option value="">— pick a snippet —</option>
         <option value="kotlin">Kotlin</option>
-        <option value="typescript">TypeScript</option>
         <option value="python">Python</option>
-        <option value="sql">SQL</option>
         <option value="json">JSON</option>
-        <option value="bash">Bash</option>
+        <option value="javascript">JavaScript</option>
       </select>
     </div>
   </div>
