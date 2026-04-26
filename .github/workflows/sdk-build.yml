@@ -3,8 +3,26 @@ name: SDK Build
 on:
   push:
     branches: [main]
+    paths:
+      - "sdk/**"
+      - "sample/**"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "gradle/**"
+      - "gradlew"
+      - "gradlew.bat"
+      - ".github/workflows/sdk-build.yml"
   pull_request:
     branches: [main]
+    paths:
+      - "sdk/**"
+      - "sample/**"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "gradle/**"
+      - "gradlew"
+      - "gradlew.bat"
+      - ".github/workflows/sdk-build.yml"
 
 jobs:
   build:
