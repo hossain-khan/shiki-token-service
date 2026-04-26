@@ -121,7 +121,7 @@ append ""
 # ── Table header helper ───────────────────────────────────────────────────────
 
 append_table_header() {
-  append "| Language | Size | File Bytes | Lines | Req Bytes | Resp Bytes | Token Lines | Total Tokens | Avg RTT ms | Min ms | Max ms | Server ms | Tokenizer ms |"
+  append "| Language | Size | File Bytes | Lines | Req Bytes | Resp Bytes | Token Lines | Total Tokens | Avg RTT ms | Min ms | Max ms | Server µs | Tokenizer µs |"
   append "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"
 }
 
@@ -218,12 +218,12 @@ run_test() {
   token_lines="$(jq -r '.tokens | length' "$last_resp_file" 2>/dev/null || echo "0")"
   total_tokens="$(jq -r '[.tokens[] | length] | add // 0' "$last_resp_file" 2>/dev/null || echo "0")"
 
-  # Format server_total_ms and tokenizer_ms as integers for cleaner table
+  # Convert ms floats → microseconds (integer) for sub-ms precision (fixes issue #11)
   if [[ "$server_total_ms" != "n/a" ]]; then
-    server_total_ms="$(echo "scale=0; $server_total_ms / 1" | bc)"
+    server_total_ms="$(echo "scale=0; ($server_total_ms * 1000 + 0.5) / 1" | bc)"
   fi
   if [[ "$tokenizer_ms" != "n/a" ]]; then
-    tokenizer_ms="$(echo "scale=0; $tokenizer_ms / 1" | bc)"
+    tokenizer_ms="$(echo "scale=0; ($tokenizer_ms * 1000 + 0.5) / 1" | bc)"
   fi
 
   # JSON-safe values (convert "n/a" to null for the HTML report)
@@ -234,7 +234,7 @@ run_test() {
 
   append "| $language | $size_label | $file_bytes | $line_count | $req_bytes | $resp_bytes | $token_lines | $total_tokens | $avg_rtt | $min_rtt | $max_rtt | $server_total_ms | $tokenizer_ms |"
 
-  printf "  %-22s  %-8s  RTT: avg=%sms min=%sms max=%sms  tokenizer=%sms\n" \
+  printf "  %-22s  %-8s  RTT: avg=%sms min=%sms max=%sms  tokenizer=%sµs\n" \
     "$language" "$size_label" "$avg_rtt" "$min_rtt" "$max_rtt" "$tokenizer_ms"
 }
 
@@ -314,8 +314,8 @@ append ""
 append "## Notes"
 append ""
 append "- **RTT (Round-Trip Time)**: Measured by curl \`time_total\` in ms, includes network latency."
-append "- **Server ms**: \`_debug.totalMs\` from response body — server wall-clock time in ms."
-append "- **Tokenizer ms**: \`_debug.tokenizerMs\` from response body — time spent in the Shiki tokenizer."
+append "- **Server µs**: \`_debug.totalMs\` converted to microseconds (×1000) — server wall-clock time."
+append "- **Tokenizer µs**: \`_debug.tokenizerMs\` converted to microseconds (×1000) — time spent in the Shiki tokenizer."
 append "- **Token Lines**: Number of source code lines in the tokenized output (\`tokens.length\`)."
 append "- **Total Tokens**: Sum of all tokens across all lines."
 append "- **Req Bytes**: JSON payload size sent (includes \`debug: true\` and metadata)."
@@ -539,7 +539,7 @@ ENDPOINTS.forEach(ep => {
         <th class="r">Req Bytes</th><th class="r">Resp Bytes</th>
         <th class="r">Token Lines</th><th class="r">Total Tokens</th>
         <th class="r">Avg RTT ms</th><th class="r">Min ms</th><th class="r">Max ms</th>
-        <th class="r">Server ms</th><th class="r">Tokenizer ms</th>
+        <th class="r">Server µs</th><th class="r">Tokenizer µs</th>
       </tr></thead>
       <tbody>
         ${rows.map(d => `<tr>
@@ -565,8 +565,8 @@ ENDPOINTS.forEach(ep => {
 document.getElementById('notesBox').innerHTML = `
   <strong>Notes:</strong><br>
   &bull; <strong>RTT</strong>: Full client round-trip time measured by curl <code>time_total</code>, includes network latency.<br>
-  &bull; <strong>Server ms</strong>: <code>_debug.totalMs</code> — server wall-clock time from the response body (<code>debug: true</code>).<br>
-  &bull; <strong>Tokenizer ms</strong>: <code>_debug.tokenizerMs</code> — time spent inside the Shiki tokenizer on the server.<br>
+  &bull; <strong>Server µs</strong>: <code>_debug.totalMs × 1000</code> — server wall-clock time in microseconds (<code>debug: true</code>).<br>
+  &bull; <strong>Tokenizer µs</strong>: <code>_debug.tokenizerMs × 1000</code> — Shiki tokenizer time in microseconds.<br>
   &bull; <strong>Token Lines / Total Tokens</strong>: parsed from the response <code>tokens</code> array.<br>
   &bull; Iterations per test: <strong>${META.iterations}</strong>. Avg / min / max computed over all iterations.
 `;

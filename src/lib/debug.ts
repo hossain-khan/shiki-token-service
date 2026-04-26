@@ -5,7 +5,7 @@ import type { Context } from "hono";
  *
  * When `debug` is `false` the original `body` is returned unchanged. When
  * `true`, the following fields are added under `_debug`:
- * - `totalMs`          — total request wall-clock time in ms (1 decimal place).
+ * - `totalMs`          — total request wall-clock time in ms (3 decimal places, µs resolution).
  * - `tokenizerMs`      — Shiki tokenizer time in ms (present on highlight routes).
  * - `requestBodyBytes` — incoming `Content-Length` in bytes.
  * - `...extra`         — any route-specific fields (e.g. echoed `language` / `theme`).
@@ -29,8 +29,8 @@ export function withDebug(
   return {
     ...body,
     _debug: {
-      totalMs: Math.round(totalMs * 10) / 10,
-      ...(tokenizerMs !== undefined && { tokenizerMs: Math.round(tokenizerMs * 10) / 10 }),
+      totalMs: Math.round(totalMs * 1000) / 1000,
+      ...(tokenizerMs !== undefined && { tokenizerMs: Math.round(tokenizerMs * 1000) / 1000 }),
       requestBodyBytes: c.get("requestBodyBytes"),
       ...extra,
     },
