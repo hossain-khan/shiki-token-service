@@ -360,3 +360,10 @@ All `ShikiClient` methods are `suspend` functions and return `kotlin.Result<T>`,
 - **Regex Engine**: [Pre-compiled JavaScript](https://shiki.style/guide/regex-engines) (via `@shikijs/langs-precompiled`)
 - **Validation**: [Zod](https://zod.dev/)
 - **Language**: TypeScript
+
+---
+
+> [!NOTE]
+> This project was developed with the assistance of AI coding agents (GitHub Copilot).
+> Code, architecture, tests, and documentation were generated or refined through
+> AI-assisted pair programming. Review accordingly before using in production.
