@@ -14,11 +14,11 @@ const app = new Hono();
 const SNIPPETS_JSON = JSON.stringify({
   kotlin: {
     lang: "kotlin",
-    code: "package com.example\n\nimport kotlinx.coroutines.*\n\ndata class User(val name: String, val age: Int)\n\nsuspend fun fetchUsers(): List<User> = coroutineScope {\n    val users = listOf(\n        User(\"Alice\", 30),\n        User(\"Bob\", 25),\n        User(\"Charlie\", 35),\n    )\n    val adults = users.filter { it.age >= 30 }\n    adults.forEach { user ->\n        println(\"${user.name} is ${user.age} years old\")\n    }\n    adults\n}\n\nfun main() = runBlocking {\n    val result = fetchUsers()\n    println(\"Found ${result.size} adults\")\n}",
+    code: 'package com.example\n\nimport kotlinx.coroutines.*\n\ndata class User(val name: String, val age: Int)\n\nsuspend fun fetchUsers(): List<User> = coroutineScope {\n    val users = listOf(\n        User("Alice", 30),\n        User("Bob", 25),\n        User("Charlie", 35),\n    )\n    val adults = users.filter { it.age >= 30 }\n    adults.forEach { user ->\n        println("${user.name} is ${user.age} years old")\n    }\n    adults\n}\n\nfun main() = runBlocking {\n    val result = fetchUsers()\n    println("Found ${result.size} adults")\n}',
   },
   python: {
     lang: "python",
-    code: "from dataclasses import dataclass\nfrom typing import Optional\nimport asyncio\n\n@dataclass\nclass User:\n    name: str\n    age: int\n    email: Optional[str] = None\n\nasync def fetch_users() -> list[User]:\n    # Simulate async data fetch\n    await asyncio.sleep(0.1)\n    return [\n        User(\"Alice\", 30, \"alice@example.com\"),\n        User(\"Bob\", 25),\n        User(\"Charlie\", 35, \"charlie@example.com\"),\n    ]\n\nasync def main():\n    users = await fetch_users()\n    adults = [u for u in users if u.age >= 30]\n    for user in adults:\n        print(f\"{user.name} is {user.age} years old\")\n\nif __name__ == \"__main__\":\n    asyncio.run(main())",
+    code: 'from dataclasses import dataclass\nfrom typing import Optional\nimport asyncio\n\n@dataclass\nclass User:\n    name: str\n    age: int\n    email: Optional[str] = None\n\nasync def fetch_users() -> list[User]:\n    # Simulate async data fetch\n    await asyncio.sleep(0.1)\n    return [\n        User("Alice", 30, "alice@example.com"),\n        User("Bob", 25),\n        User("Charlie", 35, "charlie@example.com"),\n    ]\n\nasync def main():\n    users = await fetch_users()\n    adults = [u for u in users if u.age >= 30]\n    for user in adults:\n        print(f"{user.name} is {user.age} years old")\n\nif __name__ == "__main__":\n    asyncio.run(main())',
   },
   json: {
     lang: "json",
