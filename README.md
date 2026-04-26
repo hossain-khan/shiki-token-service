@@ -7,6 +7,8 @@ A portable syntax highlighting microservice that tokenizes source code using [Sh
 
 > 💬 See https://hossain.dev/posts/syntax-highlighting-on-android-bringing-shiki-engine-to-compose/
 
+<img width="3477" height="1997" alt="shiki-service-compare" src="https://github.com/user-attachments/assets/01b99d3d-cf51-465c-8a01-36819dfdbdc6" />
+
 ## Quick Start
 
 ```bash
