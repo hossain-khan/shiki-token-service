@@ -1,5 +1,26 @@
 # Copilot Instructions
 
+## Git Workflow
+
+Always follow this order when making changes:
+
+1. **Create a local branch** from `main` — never work directly on `main` or push directly to `origin` without a local branch first.
+2. **Commit locally** on that branch.
+3. **Push the local branch** to `origin` (`git push origin <branch-name>`).
+4. Open a PR from the pushed branch.
+
+```bash
+git checkout main && git pull
+git checkout -b feature/my-feature
+# ... make changes ...
+git add <files>
+git commit -m "Description of changes"
+git push origin feature/my-feature
+# then open a PR
+```
+
+---
+
 ## Repository Overview
 
 This repo has two independent components:
