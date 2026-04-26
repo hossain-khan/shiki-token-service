@@ -43,7 +43,7 @@ trap cleanup EXIT
 
 check_deps() {
   local missing=()
-  for cmd in curl jq bc; do
+  for cmd in curl jq bc gzip; do
     command -v "$cmd" &>/dev/null || missing+=("$cmd")
   done
   if [[ ${#missing[@]} -gt 0 ]]; then
@@ -53,6 +53,14 @@ check_deps() {
   fi
 }
 check_deps
+
+# Optional: brotli for compressed-size reporting (brew install brotli)
+HAS_BROTLI=false
+if command -v brotli &>/dev/null; then
+  HAS_BROTLI=true
+else
+  echo "Note: 'brotli' not found — brotli column will show n/a  (brew install brotli)"
+fi
 
 # ── Setup ─────────────────────────────────────────────────────────────────────
 
@@ -121,8 +129,8 @@ append ""
 # ── Table header helper ───────────────────────────────────────────────────────
 
 append_table_header() {
-  append "| Language | Size | File Bytes | Lines | Req Bytes | Resp Bytes | Token Lines | Total Tokens | Avg RTT ms | Min ms | Max ms | Server µs | Tokenizer µs |"
-  append "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"
+  append "| Language | Size | File Bytes | Lines | Req Bytes | Resp Bytes | Gzip Bytes | Brotli Bytes | Token Lines | Total Tokens | Avg RTT ms | Min ms | Max ms | Server µs | Tokenizer µs |"
+  append "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"
 }
 
 # ── Core benchmark function ───────────────────────────────────────────────────
@@ -210,6 +218,15 @@ run_test() {
   local avg_rtt
   avg_rtt="$(echo "scale=0; $sum_rtt / $ITERATIONS" | bc)"
 
+  # ── Compute compressed sizes ───────────────────────────────────────────────
+  local gzip_bytes brotli_bytes
+  gzip_bytes="$(gzip -c "$last_resp_file" | wc -c | tr -d ' ')"
+  if $HAS_BROTLI; then
+    brotli_bytes="$(brotli -c "$last_resp_file" | wc -c | tr -d ' ')"
+  else
+    brotli_bytes="n/a"
+  fi
+
   # ── Parse final response ─────────────────────────────────────────────────
 
   local server_total_ms tokenizer_ms req_body_bytes_server token_lines total_tokens
@@ -227,12 +244,14 @@ run_test() {
   fi
 
   # JSON-safe values (convert "n/a" to null for the HTML report)
-  local sm_json tm_json
+  local sm_json tm_json gz_json br_json
   [[ "$server_total_ms" == "n/a" ]] && sm_json="null" || sm_json="$server_total_ms"
   [[ "$tokenizer_ms"    == "n/a" ]] && tm_json="null" || tm_json="$tokenizer_ms"
-  DATA_JSON_ROWS+=("{\"endpoint\":\"$CURRENT_ENDPOINT\",\"language\":\"$language\",\"size\":\"$size_label\",\"fileBytes\":$file_bytes,\"lines\":$line_count,\"reqBytes\":$req_bytes,\"respBytes\":$resp_bytes,\"tokenLines\":$token_lines,\"totalTokens\":$total_tokens,\"avgRtt\":$avg_rtt,\"minRtt\":$min_rtt,\"maxRtt\":$max_rtt,\"serverMs\":$sm_json,\"tokenizerMs\":$tm_json}")
+  [[ "$gzip_bytes"      == "n/a" ]] && gz_json="null" || gz_json="$gzip_bytes"
+  [[ "$brotli_bytes"    == "n/a" ]] && br_json="null" || br_json="$brotli_bytes"
+  DATA_JSON_ROWS+=("{\"endpoint\":\"$CURRENT_ENDPOINT\",\"language\":\"$language\",\"size\":\"$size_label\",\"fileBytes\":$file_bytes,\"lines\":$line_count,\"reqBytes\":$req_bytes,\"respBytes\":$resp_bytes,\"gzipBytes\":$gz_json,\"brotliBytes\":$br_json,\"tokenLines\":$token_lines,\"totalTokens\":$total_tokens,\"avgRtt\":$avg_rtt,\"minRtt\":$min_rtt,\"maxRtt\":$max_rtt,\"serverMs\":$sm_json,\"tokenizerMs\":$tm_json}")
 
-  append "| $language | $size_label | $file_bytes | $line_count | $req_bytes | $resp_bytes | $token_lines | $total_tokens | $avg_rtt | $min_rtt | $max_rtt | $server_total_ms | $tokenizer_ms |"
+  append "| $language | $size_label | $file_bytes | $line_count | $req_bytes | $resp_bytes | $gzip_bytes | $brotli_bytes | $token_lines | $total_tokens | $avg_rtt | $min_rtt | $max_rtt | $server_total_ms | $tokenizer_ms |"
 
   printf "  %-22s  %-8s  RTT: avg=%sms min=%sms max=%sms  tokenizer=%sµs\n" \
     "$language" "$size_label" "$avg_rtt" "$min_rtt" "$max_rtt" "$tokenizer_ms"
@@ -394,7 +413,7 @@ footer code{color:#64748b;font-family:ui-monospace,monospace}
   <div class="section-title">Performance Charts</div>
   <div class="chart-grid">
     <div class="chart-card"><h3>Avg Round-Trip Time (ms) &mdash; All Endpoints</h3><canvas id="chartRtt"></canvas></div>
-    <div class="chart-card"><h3>Response Size (KB) &mdash; All Endpoints</h3><canvas id="chartRespSize"></canvas></div>
+    <div class="chart-card"><h3>Response Size: Uncompressed vs Gzip vs Brotli</h3><canvas id="chartRespSize"></canvas></div>
     <div class="chart-card"><h3>Total Tokens per Fixture</h3><canvas id="chartTokens"></canvas></div>
     <div class="chart-card"><h3>RTT Range &mdash; /highlight &nbsp;(min / avg / max)</h3><canvas id="chartRttRange"></canvas></div>
   </div>
@@ -474,15 +493,22 @@ new Chart(document.getElementById('chartRtt'), {
   options: yTitle('ms'),
 });
 
-// Chart 2: Response size — all endpoints
+// Chart 2: Response size — uncompressed vs gzip vs brotli (/highlight fixtures)
+const hlData = DATA.filter(d => d.endpoint === '/highlight');
 new Chart(document.getElementById('chartRespSize'), {
   type: 'bar',
-  data: { labels: FX_LABELS, datasets: mkDatasets('respBytes', v => +(v / 1024).toFixed(1)) },
+  data: {
+    labels: FX_LABELS,
+    datasets: [
+      { label: 'Uncompressed', data: hlData.map(d => +(d.respBytes/1024).toFixed(1)),                                                       backgroundColor: 'rgba(148,163,184,0.8)', borderColor: '#94a3b8', borderWidth: 1.5, borderRadius: 3 },
+      { label: 'Gzip',         data: hlData.map(d => d.gzipBytes   != null ? +(d.gzipBytes/1024).toFixed(1)   : null), backgroundColor: 'rgba(59,130,246,0.8)',  borderColor: '#3b82f6', borderWidth: 1.5, borderRadius: 3 },
+      { label: 'Brotli',       data: hlData.map(d => d.brotliBytes != null ? +(d.brotliBytes/1024).toFixed(1) : null), backgroundColor: 'rgba(34,197,94,0.8)',   borderColor: '#22c55e', borderWidth: 1.5, borderRadius: 3 },
+    ],
+  },
   options: yTitle('KB'),
 });
 
 // Chart 3: Total tokens (/highlight only — same code, same token count across endpoints)
-const hlData = DATA.filter(d => d.endpoint === '/highlight');
 new Chart(document.getElementById('chartTokens'), {
   type: 'bar',
   data: {
@@ -537,6 +563,7 @@ ENDPOINTS.forEach(ep => {
         <th>Language</th><th>Size</th>
         <th class="r">File Bytes</th><th class="r">Lines</th>
         <th class="r">Req Bytes</th><th class="r">Resp Bytes</th>
+        <th class="r">Gzip KB</th><th class="r">Brotli KB</th>
         <th class="r">Token Lines</th><th class="r">Total Tokens</th>
         <th class="r">Avg RTT ms</th><th class="r">Min ms</th><th class="r">Max ms</th>
         <th class="r">Server µs</th><th class="r">Tokenizer µs</th>
@@ -549,6 +576,8 @@ ENDPOINTS.forEach(ep => {
           <td class="r">${fmt(d.lines)}</td>
           <td class="r">${fmt(d.reqBytes)}</td>
           <td class="r">${kb(d.respBytes)}</td>
+          <td class="r">${d.gzipBytes   != null ? kb(d.gzipBytes)   : 'n/a'}</td>
+          <td class="r">${d.brotliBytes != null ? kb(d.brotliBytes) : 'n/a'}</td>
           <td class="r">${fmt(d.tokenLines)}</td>
           <td class="r">${fmt(d.totalTokens)}</td>
           <td class="r"><strong>${fmt(d.avgRtt)}</strong></td>
@@ -565,6 +594,7 @@ ENDPOINTS.forEach(ep => {
 document.getElementById('notesBox').innerHTML = `
   <strong>Notes:</strong><br>
   &bull; <strong>RTT</strong>: Full client round-trip time measured by curl <code>time_total</code>, includes network latency.<br>
+  &bull; <strong>Gzip KB / Brotli KB</strong>: Response body compressed locally — represents realistic over-the-wire size when <code>Accept-Encoding</code> is supported.<br>
   &bull; <strong>Server µs</strong>: <code>_debug.totalMs × 1000</code> — server wall-clock time in microseconds (<code>debug: true</code>).<br>
   &bull; <strong>Tokenizer µs</strong>: <code>_debug.tokenizerMs × 1000</code> — Shiki tokenizer time in microseconds.<br>
   &bull; <strong>Token Lines / Total Tokens</strong>: parsed from the response <code>tokens</code> array.<br>
