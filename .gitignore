@@ -9,3 +9,7 @@ sdk/build/
 build/
 local.properties
 
+# Benchmark reports (generated artifacts)
+scripts/reports/
+
+coverage/
