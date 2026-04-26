@@ -7,6 +7,7 @@ A portable syntax highlighting microservice that tokenizes source code using [Sh
 
 > 💬 See https://hossain.dev/posts/syntax-highlighting-on-android-bringing-shiki-engine-to-compose/
 
+<a href="https://syntax-highlight.gohk.xyz/demo"><img width="32" height="924" alt="web-circle-icon" src="https://github.com/user-attachments/assets/1b6395e7-6e62-4909-9ef1-4a03edc0ecae" /></a>
 <a href="https://github.com/hossain-khan/android-syntax-highlighter-compose"><img width="32" alt="android-circle-icon" src="https://github.com/user-attachments/assets/fba65b6a-01c1-4e84-b5b0-fc14320f7135" /></a>
 <a href="https://github.com/hossain-khan/ios-syntax-highlighter-swift"><img width="32" alt="ios-circle-icon" src="https://github.com/user-attachments/assets/887245be-1052-44b1-b609-7b8131a3f0f4" /></a>
 
