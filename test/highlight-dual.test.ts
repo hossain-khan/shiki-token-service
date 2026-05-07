@@ -61,9 +61,43 @@ describe("POST /highlight/dual", () => {
     expect(body.lightTheme).toBe("github-light");
   });
 
-  it("includes Server-Timing header", async () => {
+  it("includes Server-Timing header with both total and tokenizer metrics", async () => {
     const res = await post({ code, language: "javascript" });
-    expect(res.headers.get("Server-Timing")).toMatch(/total;dur=/);
+    expect(res.headers.get("Server-Timing")).toMatch(/total;dur=.*tokenizer;dur=/);
+  });
+
+  it("includes _debug block when debug is true", async () => {
+    const res = await post({ code, language: "javascript", debug: true });
+    const body = await res.json();
+    expect(body._debug).toBeDefined();
+    expect(typeof body._debug.totalMs).toBe("number");
+    expect(typeof body._debug.tokenizerMs).toBe("number");
+    expect(typeof body._debug.requestBodyBytes).toBe("number");
+  });
+
+  it("omits _debug block when debug is false (default)", async () => {
+    const res = await post({ code, language: "javascript" });
+    const body = await res.json();
+    expect(body._debug).toBeUndefined();
+  });
+
+  it("returns 400 when code field is missing", async () => {
+    const res = await post({ language: "javascript" });
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(typeof body.error).toBe("string");
+  });
+
+  it("returns 413 when Content-Length exceeds 200 KB", async () => {
+    const res = await app.request("/highlight/dual", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": String(201 * 1024),
+      },
+      body: JSON.stringify({ code: "x", language: "javascript" }),
+    });
+    expect(res.status).toBe(413);
   });
 
   it("returns 400 for unsupported darkTheme", async () => {
