@@ -78,6 +78,26 @@ describe("POST /highlight/semantic", () => {
     expect(allTypes).toContain("number");
   });
 
+  it("includes Server-Timing header with both total and tokenizer metrics", async () => {
+    const res = await post({ code, language: "javascript" });
+    expect(res.headers.get("Server-Timing")).toMatch(/total;dur=.*tokenizer;dur=/);
+  });
+
+  it("includes _debug block when debug is true", async () => {
+    const res = await post({ code, language: "javascript", debug: true });
+    const body = await res.json();
+    expect(body._debug).toBeDefined();
+    expect(typeof body._debug.totalMs).toBe("number");
+    expect(typeof body._debug.tokenizerMs).toBe("number");
+    expect(typeof body._debug.requestBodyBytes).toBe("number");
+  });
+
+  it("omits _debug block when debug is false (default)", async () => {
+    const res = await post({ code, language: "javascript" });
+    const body = await res.json();
+    expect(body._debug).toBeUndefined();
+  });
+
   it("returns 400 for unsupported language", async () => {
     const res = await post({ code, language: "brainfuck" });
     expect(res.status).toBe(400);
@@ -90,5 +110,17 @@ describe("POST /highlight/semantic", () => {
     expect(res.status).toBe(400);
     const body = await res.json();
     expect(typeof body.error).toBe("string");
+  });
+
+  it("returns 413 when Content-Length exceeds 200 KB", async () => {
+    const res = await app.request("/highlight/semantic", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": String(201 * 1024),
+      },
+      body: JSON.stringify({ code: "x", language: "javascript" }),
+    });
+    expect(res.status).toBe(413);
   });
 });
