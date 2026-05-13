@@ -1,4 +1,4 @@
-[![](https://img.shields.io/badge/OpenAPI-3.1.0-green)](https://syntax-highlight.gohk.xyz/openapi.json) [![codecov](https://codecov.io/github/hossain-khan/shiki-token-service/graph/badge.svg?token=JZN1FOKJLJ)](https://codecov.io/github/hossain-khan/shiki-token-service) [![](https://jitpack.io/v/hossain-khan/shiki-token-service.svg)](https://jitpack.io/#hossain-khan/shiki-token-service)
+[![](https://img.shields.io/badge/OpenAPI-3.1.0-green)](https://syntax-highlight.gohk.xyz/openapi.json) [![codecov](https://codecov.io/github/hossain-khan/shiki-token-service/graph/badge.svg?token=JZN1FOKJLJ)](https://codecov.io/github/hossain-khan/shiki-token-service) [![](https://jitpack.io/v/hossain-khan/shiki-token-service.svg)](https://jitpack.io/#hossain-khan/shiki-token-service) [![](https://androidweekly.net/issues/issue-725/badge)](https://androidweekly.net/issues/issue-725)
 
 
 # Shiki Token Service
